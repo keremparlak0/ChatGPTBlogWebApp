@@ -1,0 +1,11 @@
+<!-- Yazar Sayfası (giriş yapılmış)-->
+{% extends 'layout.html'%}
+
+{% block content %}
+<h1> Panel </h1>
+    {{ author.first_name }} {{ author.last_name }} <br>
+    {{ author.email }} <br>
+    {{ author.user.username }} <br>
+
+{% endblock content %}
+

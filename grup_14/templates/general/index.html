@@ -1,0 +1,25 @@
+<!-- Ana Sayfa -->
+{% extends 'layout.html'%}
+
+{% block content %}
+<h1>Ana Sayfa</h1>
+{% for user in Users %}
+{{ user.first_name }} {{ user.last_name }} {{ user.email }} {{ user.author.join_date }} <br>
+{{ user.author.first_name }} {{ user.author.last_name }} <br>
+
+{% if user.author.img %}
+    <img src=" {{ user.author.img.url }} " width=50px height=50px > <br>
+{% else %}
+    <img src="{{ MEDIA_URL }}library/images/" width=50px height=50px > <br>
+{% endif %}
+
+
+<a class="btn btn-secondary" href=" {% url 'update' %} ">update user</a> <br><br>
+<a class="btn btn-secondary" href=" {% url 'update-author' %} ">update author</a> <br>
+
+{% endfor %}
+
+{% endblock content %}
+
+
+

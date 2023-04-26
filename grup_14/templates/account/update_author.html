@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h1> Update Author </h1>
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ author_form.as_p }}<br>
+        {{ profile_pic_form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+    <br>
+   
+
+    
+{% endblock  %}
