@@ -6,13 +6,11 @@ from django.contrib.auth.models import User
 
 class Author(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30),
     slug = models.SlugField(default="", blank=True, null=False, unique=True, db_index=True),
-    about = models.TextField(max_length=250),
-    contact = models.URLField(),
-    birthday = models.DateField(),
-    img = models.ImageField()
-    join_date = models.DateField(auto_now=True),
+    about = models.TextField(max_length=250, default="", blank=True, null=True),
+    contact = models.URLField(default="", blank=True, null=True),
+    birthday = models.DateField(default="", blank=True, null=True),
+    picture = models.ImageField(default="", blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -25,19 +23,29 @@ class Draft(models.Model):
 class Library(models.Model):
     image = models.ImageField(upload_to="images")
     
-
 class Blog(models.Model):
+    draft = models.ForeignKey(Draft, on_delete=models.CASCADE)
+    banner = models.ImageField(upload_to="banners")
     title = models.CharField(max_length=50)
     slug = models.SlugField(default="", blank=True, null=False, unique=True, db_index=True)
-    description = models.TextField(max_length=200)
-    topics = models.CharField()
+    description = models.TextField(max_length=250)
+    tags = models.CharField()
     date = models.DateField(auto_now=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    banner = models.ImageField(upload_to="banners")
-    draft = models.ForeignKey(Draft, on_delete=models.CASCADE)
-    likes = models.PositiveIntegerField()
+    like_count = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(args, kwargs)
+
+class Follow(models.Model):
+    author_id = models.ForeignKey(Author, on_delete=models.CASCADE)  #following
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)      #followers
+
+class Comments(models.Model):
+    blog_id = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.CharField(max_length=500)
+    date = models.DateField(auto_now=True)
+
 
