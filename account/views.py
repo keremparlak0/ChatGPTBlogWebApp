@@ -71,5 +71,5 @@ def register_request(request):
 
 def logout_request(request):
     logout(request)
-    return redirect("home")
+    return redirect("index")
 

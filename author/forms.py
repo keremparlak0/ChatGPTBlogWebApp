@@ -2,16 +2,11 @@ from django import forms
 
 from author.models import *
 
-# class PublishForm(forms.Form):
-#     title = forms.CharField(label="Başlık:")
-#     description = forms.CharField(widget=forms.Textarea)
-#     topics = forms.CharField()
-#     cover = forms.CharField()
-
+# Blog Model Form
 class PublishForm(forms.ModelForm):
     class Meta:
         model = Blog
-        fields = ['title', 'description', 'topics', 'banner', 'text']
+        fields = ['title', 'description', 'tags', 'banner']
         labels = {
             "title": "Blog Başlığı",
             "description": "Açıklama",
@@ -34,7 +29,7 @@ class PublishForm(forms.ModelForm):
             }
         }
 
-
+# Library Model Form
 class UploadForm(forms.ModelForm):
     class Meta:
         model = Library
@@ -51,12 +46,30 @@ class UploadForm(forms.ModelForm):
             }
         }
 
+# Draft Model Form
 class Editor(forms.ModelForm):
     class Meta:
-        model = Article
-        fields = ['content']
-        widgets = {
-            'content' : RichTextFormField(config_name="default")
-        }
+        model = Draft
+        fields = '__all__'
         
 
+# Author Model Form
+class UpdateForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = '__all__'
+
+
+# Follow Model Form
+class FollowForm(forms.ModelForm):
+    class Meta:
+        model = Follow
+        fields = '__all__'
+
+
+
+# Comment Model Form
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comments
+        fields = '__all__'

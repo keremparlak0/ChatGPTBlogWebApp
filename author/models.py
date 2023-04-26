@@ -29,7 +29,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=50)
     slug = models.SlugField(default="", blank=True, null=False, unique=True, db_index=True)
     description = models.TextField(max_length=250)
-    tags = models.CharField()
+    tags = models.CharField(max_length=500)
     date = models.DateField(auto_now=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     like_count = models.PositiveIntegerField(default=0)
