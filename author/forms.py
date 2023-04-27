@@ -58,7 +58,7 @@ class Editor(forms.ModelForm):
 class UpdateForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = '__all__'
+        fields = ['about','contact','birthday','picture']
 
 
 # Follow Model Form

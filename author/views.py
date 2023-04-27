@@ -14,18 +14,21 @@ from author.models import *
 # template: author/editor.html   #ckeditor
 @login_required()
 def editor(request):
-
     if request.method == 'POST':
         form = Editor(request.POST)
+        user = request.user.id
+
         if form.is_valid():
-            form.save()
-            return HttpResponse('New Blog Successfully Added')
+            draft = Draft(content=form.cleaned_data["content"], author=user)
+            draft.save() 
     else:
         form = Editor()
         context = {
             'form':form
         }
-    return render(request, 'home.html', context)
+    return render(request, 'author/editor.html', context)
+
+
 
 # site/author/panel
 # template: author/panel.html
@@ -37,7 +40,30 @@ def panel(request):
 # template: author/update.html
 @login_required()
 def update(request):
-    return render(request, "author/update.html")
+    user = request.user.id
+    reqUser = request.GET.get("user",None)
+    if reqUser == user:
+        if request.method == 'POST':
+            form = UpdateForm(request.POST, request.FILES)
+            if form.is_valid():
+                author = Author(
+                    user = request.user.id,
+                    about = form.cleaned_data["about"],
+                    contact = form.cleaned_data["contact"],
+                    birthday = form.cleaned_data["birthday"],
+                    picture = request.FILES["picture"]
+                    )
+                author.save() 
+        else:
+            form = Editor()
+            context = {
+                'form':form
+            }
+        return render(request, 'author/update.html', context)
+    else:
+        redirect("/account/login")
+    
+
 
 # site/author/publish
 # template: author/publish.html
@@ -54,7 +80,6 @@ def publish(request):
             )
             blog.save()
             return redirect("/author/panel")
-
     else:
         form = PublishForm()
 
