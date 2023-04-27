@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'general',
     'account',
     'author',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -127,8 +128,10 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_ROOT = BASE_DIR / "library"
 MEDIA_URL = "/media/"
+CKEDITOR_UPLOAD_PATH = BASE_DIR / "library/ckeditor/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_URL = "/account/login"

@@ -1,5 +1,5 @@
 from django import forms
-
+from ckeditor.widgets import CKEditorWidget
 from author.models import *
 
 # Blog Model Form
@@ -48,9 +48,10 @@ class UploadForm(forms.ModelForm):
 
 # Draft Model Form
 class Editor(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorWidget())
     class Meta:
         model = Draft
-        fields = '__all__'
+        fields = ['content']
         
 
 # Author Model Form

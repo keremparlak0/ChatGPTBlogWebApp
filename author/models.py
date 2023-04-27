@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
+
 
 # Create your models here.
 
@@ -18,7 +20,7 @@ class Author(models.Model):
 
 class Draft(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    text = models.TextField()
+    content = RichTextField()
 
 class Library(models.Model):
     image = models.ImageField(upload_to="images")

@@ -6,5 +6,5 @@ urlpatterns = [
     path('update', views.update),
     path('publish', views.publish),
     path('upload', views.upload),
-    path('editor/', include('ckeditor_uploader.urls')),
+    path('editor', views.editor, name='editor'),
 ]

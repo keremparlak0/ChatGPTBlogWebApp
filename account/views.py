@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 def login_request(request):
     if request.user.is_authenticated:
-        return redirect("home")
+        return redirect("/author/panel")
 
     if request.method == "POST":
         username = request.POST["username"]
@@ -14,7 +14,11 @@ def login_request(request):
 
         if user is not None:
             login(request, user)
-            return redirect("home")
+            nextUrl = request.GET.get("next",None)
+            if nextUrl is None:
+                return redirect("/author/panel")
+            else:
+                return redirect(nextUrl)
         else:
             return render(request, "account/login.html", {
                 "error": "kullanıcı adı ya da parola yanlış"
