@@ -1,3 +1,24 @@
 <!-- Yazar Sayfası (giriş yapılmış)-->
 {% extends 'layout.html' %}
 
+{% load static %}
+
+{% block title %} Yazar Paneli {% endblock title %}  
+
+{% block content  %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>bloglar</h1>
+                <hr>
+                {{blogs}}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+
+
