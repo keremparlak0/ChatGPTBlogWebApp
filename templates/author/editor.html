@@ -1,7 +1,20 @@
 <!-- Editor sayfası -->
-{% extends "admin/change_form.html" %}
+{% extends "layout.html" %}
+{% load static %}
 
-{% block extrahead %}
-<script>window.CKEDITOR_BASEPATH = '/my_static/ckeditor/ckeditor/';</script>
-{{ block.super }}
-{% endblock %}
+
+{% block title %} Editor {% endblock title %} Editor 
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <input type="submit" value="Submit">
+</form>
+
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock content %}
+
+

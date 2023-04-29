@@ -1,2 +1,38 @@
 <!-- Yazar Profil Güncelleme Sayfası-->
 {% extends 'layout.html' %}
+
+{% load static %}
+
+{% block title %} Update {% endblock title %}
+
+{% block content %}
+
+<div class="container mt-3">
+    <div class="col">
+        <h1>Update</h1>
+        <hr>
+        <form method="POST" class="form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3 {% if field.error %}invalid{% endif %}">
+                {% if field.errors %}
+                    <div class="alert alert-danger pb-0">{{field.errors}}</div>
+                {% endif %}
+                    <label for="{{ field.id_for_label }}" class="form-label"> {{ field.label }} </label>
+                    {{ field }}                    
+                    </div> 
+            {% endfor %}
+            <button type="submit" class="btn"> Update </button>
+        </form>
+
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+
+
+
+
