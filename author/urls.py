@@ -5,6 +5,6 @@ urlpatterns = [
     path('panel/', views.panel),
     path('update/', views.update),
     path('publish/', views.publish),
-    path('upload/', views.upload),
+    #path('upload/', views.upload),
     path('editor/', views.editor),
 ]

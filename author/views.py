@@ -16,10 +16,10 @@ from author.models import *
 def editor(request):
     if request.method == 'POST':
         form = Editor(request.POST)
-        user = request.user.id
+        user = request.user
 
         if form.is_valid():
-            draft = Draft(content=form.cleaned_data["content"], author=user)
+            draft = Draft(content=form.cleaned_data["content"], author= Author.objects.get(user = user))
             draft.save() 
     else:
         form = Editor()
@@ -36,63 +36,67 @@ def editor(request):
 def panel(request):
     return render(request, "author/panel.html")
 
-# site/author/updatehttps://django-ckeditor.readthedocs.io/en/latest/
+# site/author/update/
 # template: author/update.html
 @login_required()
 def update(request):
-    user = request.user.id
-    reqUser = request.GET.get("user",None)
-    if reqUser == user:
-        if request.method == 'POST':
-            form = UpdateForm(request.POST, request.FILES)
-            if form.is_valid():
-                author = Author(
-                    user = request.user.id,
-                    about = form.cleaned_data["about"],
-                    contact = form.cleaned_data["contact"],
-                    birthday = form.cleaned_data["birthday"],
-                    picture = request.FILES["picture"]
-                    )
-                author.save() 
-        else:
-            form = Editor()
-            context = {
-                'form':form
-            }
-        return render(request, 'author/update.html', context)
+    if request.method == 'POST':
+        form = UpdateForm(request.POST, request.FILES)
+        if form.is_valid():
+            author = Author(
+                user = request.user.id,
+                about = form.cleaned_data["about"],
+                contact = form.cleaned_data["contact"],
+                birthday = form.cleaned_data["birthday"],
+                picture = request.FILES["picture"],
+                )
+            author.save() 
     else:
-        redirect("/account/login")
-    
+        form = UpdateForm()
+        context = {
+            'form':form
+        }
+    return render(request, 'author/update.html', context)
 
 
-# site/author/publish
+
+# site/author/publish/?draft=draft_id
 # template: author/publish.html
 @login_required()
 def publish(request):
-    if request.method == "POST":
-        form = PublishForm(request.POST, request.FILES)
+    draft = request.GET.get("draft", None)
+    record = Draft.objects.get(id=draft)
+    user = request.user.id
 
-        if form.is_valid():
-            blog = Blog(
-                banner = request.FILES["image"],
-                title = form.cleaned_data["title"],
-                description = form.cleaned_data["description"],
-            )
-            blog.save()
-            return redirect("/author/panel")
+    # if author own this draft
+    if record.author == user:
+        if request.method == "POST":
+            form = PublishForm(request.POST, request.FILES)
+            if form.is_valid():
+                blog = Blog(
+                    banner = request.FILES["image"],
+                    title = form.cleaned_data["title"],
+                    description = form.cleaned_data["description"],
+                )
+                blog.save()
+                return redirect("/author/panel")
+        else:
+            form = PublishForm()
+
+        return render(request, "author/publish.html", {"form":form})
     else:
-        form = PublishForm()
+        return HttpResponse("Yetkisiz erişim")
 
-    return render(request, "author/publish.html", {"form":form})
+
 
 # site/author/upload
 # template: author/library.html
-@login_required()
-def upload(request):
-    form = UploadForm(request.POST, request.FILES)
-    if request.method == "POST":
-        if form.is_valid():
-            image = Library(image = request.FILES["image"])
-            image.save()
-    else:
-        return render(request, "author/library.html", {"form":form})
+# @login_required()
+# def upload(request):
+#     form = UploadForm(request.POST, request.FILES)
+#     if request.method == "POST":
+#         if form.is_valid():
+#             image = Library(image = request.FILES["image"])
+#             image.save()
+#     else:
+#         return render(request, "author/library.html", {"form":form})

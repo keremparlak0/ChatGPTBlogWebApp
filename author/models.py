@@ -9,9 +9,9 @@ from ckeditor.fields import RichTextField
 class Author(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField(default="", blank=True, null=False, unique=True, db_index=True),
-    about = models.TextField(max_length=250, default="", blank=True, null=True),
-    contact = models.URLField(default="", blank=True, null=True),
-    birthday = models.DateField(default="", blank=True, null=True),
+    about = models.CharField(max_length=500),
+    contact = models.CharField(max_length=200),
+    birthday = models.DateTimeField(),
     picture = models.ImageField(default="", blank=True, null=True)
 
     def save(self, *args, **kwargs):

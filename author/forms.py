@@ -30,21 +30,21 @@ class PublishForm(forms.ModelForm):
         }
 
 # Library Model Form
-class UploadForm(forms.ModelForm):
-    class Meta:
-        model = Library
-        fields = ['image']
-        labels = {
-            "image": "Resim Yükleme Alanı"
-        }
-        widgets = {
-            "image" : forms.FileInput(attrs={"class":"form-control"})
-        }
-        error_messages = {
-            "image":{
-                "required" : "Bir resim dosyası yüklemelisiniz"
-            }
-        }
+# class UploadForm(forms.ModelForm):
+#     class Meta:
+#         model = Library
+#         fields = ['image']
+#         labels = {
+#             "image": "Resim Yükleme Alanı"
+#         }
+#         widgets = {
+#             "image" : forms.FileInput(attrs={"class":"form-control"})
+#         }
+#         error_messages = {
+#             "image":{
+#                 "required" : "Bir resim dosyası yüklemelisiniz"
+#             }
+#         }
 
 # Draft Model Form
 class Editor(forms.ModelForm):
@@ -58,8 +58,7 @@ class Editor(forms.ModelForm):
 class UpdateForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = ['about','contact','birthday','picture']
-
+        fields = '__all__'
 
 # Follow Model Form
 class FollowForm(forms.ModelForm):
