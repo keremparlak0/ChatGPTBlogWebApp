@@ -10,24 +10,17 @@ class PublishForm(forms.ModelForm):
         labels = {
             "title": "Blog Başlığı",
             "description": "Açıklama",
-            "banner" : "Kapak Görseli"
+            "banner" : "Kapak Görseli",
+            "tags" : "etiketler",
 
         }
         widgets = {
             "title": forms.TextInput(attrs={"class":"form-control"}),
             "description":forms.Textarea(attrs={"class":"form-control"}),
-            "topics" : forms.TextInput(attrs={"class":"form-control"}),
+            "tags" : forms.TextInput(attrs={"class":"form-control"}),
             "banner" : forms.FileInput(attrs={"class":"form-control"}),
         }
-        error_messages = {
-            "title":{
-                "required" : "Blog başlığı girmelisiniz",
-                "max_length" : "Başlık uzunluğu maksimum 50 karakter",
-            },
-            "description" : {
-                "required" : "Açıklama bilgisi girilmesi zorunludur."
-            }
-        }
+
 
 # Library Model Form
 # class UploadForm(forms.ModelForm):
@@ -58,7 +51,19 @@ class Editor(forms.ModelForm):
 class UpdateForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = '__all__'
+        fields = ['about','contact','birthday','picture']
+        labels = {
+            "about": "Hakkımda: ",
+            "contact": "İletişim: ",
+            "birthday": "doğum tarihi:(YYYY-MM-DD)",
+            "picture" : "Profil Görseli: ",
+        }
+        widgets = {
+            "about": forms.TextInput(attrs={"class":"form-control"}),
+            "contact": forms.TextInput(attrs={"class":"form-control"}),
+            "birthday" : forms.DateInput(attrs={"class":"form-control"}),
+            "picture" : forms.FileInput(attrs={"class":"form-control"}),
+        }
 
 # Follow Model Form
 class FollowForm(forms.ModelForm):
