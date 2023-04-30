@@ -1,8 +1,51 @@
-<!-- Blog Sayfası -->
+<!-- Blog Sayfası
+http://127.0.0.1:8000/blog/67ed3ed1-2ff3-4ea2-a7e1-06ec945ff6ab -->
 {% extends 'layout.html'%}
 
 {% block content %}
-<h1> Blogs </h1>
+<h1> Blog </h1>
+{{ blog.title }}
+{{ blog.text|safe }} <br>
+
+{% if user.is_authenticated %}
+    <form action="/blog/{{ blog.id }}/like" method="post">
+        {% csrf_token %}
+        <button class="btn btn-primary btn-sm" type="submit" name="blog_id" value="{{ blog.id }}"> {{ blog.total_likes }} like </button>
+    </form>
+{% else %}
+    <p> You need to login to like </p>
+{% endif %}
+<br> <br>
+
+{{ blog.likes.user.username }}
+<br> <br>
+
+<h2> Comments </h2>
+{% if comments %}
+{% for comment in comments %}
+    {{ comment.name }} {{ comment.created_date }}<br> {{ comment.content|safe }} 
+    {% if user.is_authenticated and user.username == comment.name %}
+        <form action="{% url 'delete_comment' comment.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+        </form>
+    {% endif %}
+    <br> <br> <br>
+{% endfor %}
+{% else %}
+    <p> No comments yet </p>
+{% endif %}
+
+{% if user.is_authenticated %}
+    <form action="/blog/{{ blog.id }}/comment" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Comment">
+    </form>
+{% else %}
+    <p> You need to login to comment </p>
+{% endif %}
+
 
 {% endblock content %}
 

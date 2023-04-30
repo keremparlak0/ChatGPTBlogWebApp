@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from ckeditor.widgets import CKEditorWidget
 from taggit.forms import TagWidget
-from author.models import *
+from author.models import Author
 
 
 class RegisterUserForm(UserCreationForm):
@@ -82,12 +82,12 @@ class UpdateAuthorForm(ModelForm):
 
     class Meta:
         model = Author
-        fields = ['first_name', 'last_name', 'email', 'slug', 'about', 'contact']
+        fields = ['first_name', 'last_name', 'email', 'about', 'contact']
         labels = {
             "first_name": "",
             "last_name": "",
             "email": "",
-            "slug": "",
+            
             "about": "",
             "contact": "",
           
@@ -97,7 +97,7 @@ class UpdateAuthorForm(ModelForm):
             "first_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "first name"}),
             "last_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "last name"}),
             "email": forms.TextInput(attrs={"class": "form-control", "placeholder": "email"}),
-            "slug": forms.TextInput(attrs={"class": "form-control", "placeholder": "slug"}),
+           
             "about": forms.Textarea(attrs={"class": "form-control", "placeholder": "about"}),
             "contact": forms.Textarea(attrs={"class": "form-control", "placeholder": "contact"}),
                   

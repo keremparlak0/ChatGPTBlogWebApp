@@ -1,0 +1,15 @@
+<!-- Yazar Profil Güncelleme Sayfası-->
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h1> Publish </h1>
+   <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ publish_form.media }}
+      {{ publish_form.as_p }}
+      {{ bannerpicform.as_p }}
+      <input type="submit" id="publish-btn" class="btn btn-primary"></button>
+    </form>
+    
+{% endblock %}

@@ -1,24 +1,76 @@
-<!-- Ana Sayfa -->
+<!-- Ana Sayfa 
+http://127.0.0.1:8000/general/index
+-->
 {% extends 'layout.html'%}
 
 {% block content %}
 <h1>Ana Sayfa</h1>
+
+<br>
+<div class="row">
+
+<div class="col-md-6">
+{% for post in posts %}
+    <div class="card" style="width: 18rem;">
+    
+
+        <div class="card-header">
+        <h3> <strong>Title: <a href="{% url 'blog' post.id %}" > {{ post.title }} </a> </strong> </h3>
+    
+        </div>
+        <div>
+            <h5 class="card-title">
+                
+            </h5> 
+            <p class="card-text">
+                Content: {{ post.content|safe }}
+            </p>
+
+            <p class="card-text">
+                tags: {{ post.tags.all|join:", " }}
+            </p>
+            <p class="card-text">
+                Author:<a href=" {% url 'profile' post.author.slug %} ">  {{ post.author.user }} </a>
+            </p>
+            <br> <br>
+        </div>
+        
+    </div>
+    {% endfor %}
+</div>
+
+
+<div class="col-md-6">
 {% for user in Users %}
-{{ user.first_name }} {{ user.last_name }} {{ user.email }} {{ user.author.join_date }} <br>
-{{ user.author.first_name }} {{ user.author.last_name }} <br>
+    <div class="card" style="width: 18rem;">
+        
 
-{% if user.author.img %}
-    <img src=" {{ user.author.img.url }} " width=50px height=50px > <br>
-{% else %}
-    <img src="{{ MEDIA_URL }}library/images/" width=50px height=50px > <br>
-{% endif %}
+            <div class="card-header">
+            <br>
+            
+            <h3> <strong>Title: Users </strong> </h3>
+            </div>
+            <div>
+                <h5 class="card-title">
+                    
+                </h5>
+               
+                 <p class="card-text">
+                    User: {{ user.username }}
+                </p>
 
+                <p class="card-text">
+                    <a href=""> delete  </a>
+                </p>
 
-<a class="btn btn-secondary" href=" {% url 'update' %} ">update user</a> <br><br>
-<a class="btn btn-secondary" href=" {% url 'update-author' %} ">update author</a> <br>
-
-{% endfor %}
-
+                <br> <br>
+            </div>
+        
+    </div>
+    {% endfor %}  
+</div>
+</div>
+<br> <br>
 {% endblock content %}
 
 

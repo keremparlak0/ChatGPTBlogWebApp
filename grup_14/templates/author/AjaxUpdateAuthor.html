@@ -1,0 +1,13 @@
+ <!-- 
+Bu sayfada sadece form olacak. bu sayfayı html olarak gonderiyoruz.
+-->
+<h1> Update Author </h1>
+
+    <form action=" {% url 'updateauthor2' %} " method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ author_form.as_p }}<br>
+        {{ profile_pic_form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+    <br>
+   

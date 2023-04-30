@@ -1,13 +1,97 @@
-<!-- Editor sayfası -->
-{% extends 'layout.html'%}
+<!-- 
+http://127.0.0.1:8000/author/editor
+-->
+{% extends "layout.html" %}
 
 {% block content %}
-<h1> editor </h1>
-   <form action="" method="post">
-        {% csrf_token %}
-        {{ form.media }}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
-    </form>
 
-{% endblock content %}
+<script>
+$(document).ready(function() {
+
+
+$('#draft-form').on('submit', function(event) {
+    event.preventDefault();
+
+    // Form verilerini FormData nesnesi olarak toplayın
+    var form_data = new FormData(this);
+
+    // Draft ID değerini de FormData nesnesine ekleyin
+    var draft_id = $('#draft-id').val();
+    form_data.append('draft_id', draft_id);
+
+    if ($("[name='action'][value='publish']").is(":focus")) {
+             $.ajax({
+        url: '{% url "publish2" %}',
+        type: 'POST',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $('#goster').html(response.htmlresponse);
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+        });
+    }
+     else {
+            this.submit();
+        }
+   
+  });
+
+});
+
+
+
+</script>
+
+
+
+<div id="goster">
+
+<h2>Editor</h2>
+
+<div class="row">
+<div class="col-md-9">
+    <form id="draft-form" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.title }}
+    </div>
+    <div class="form-group">
+        {{ form.media }}
+        {% load widget_tweaks %}
+        {{ form.text|attr:"id:id_content" }}
+    </div>
+    <button type="submit" name="action" id="draft-id" value="{{ draft.id }}" class="btn btn-secondary">Save as draft</button>
+    {% if NoneBlog %}
+    <button type="submit" name="action" value="publish" class="btn btn-success">Publish</button>
+    {% else %}
+    <a href="{% url 'editor' %}" name="action" value="update" class="btn btn-success"> Clear </a>
+    {% endif %}
+    
+    </form>
+    <br>
+    <br><br>
+    
+    
+    
+</div>
+<div class="col-md-3">
+    <h4>Your drafts:</h4>
+    <ul>
+    {% for draft in drafts %}
+        <li>
+        <a href="{% url 'editor2' draft.slug %}">{{ draft.title }}</a>
+        
+        </li>
+    {% empty %}
+        <li>No drafts yet</li>
+    {% endfor %}
+    </ul>
+</div>
+</div>
+</div>
+
+{% endblock %}

@@ -19,30 +19,35 @@ from django.contrib.auth.models import User
 #     cover = forms.CharField()
 
 class PublishForm(forms.ModelForm):
+    text = forms.CharField(widget=CKEditorWidget())
+    
+    
     class Meta:
         model = Blog
-        fields = ['title', 'description', 'banner']
+        fields = ['title', 'text', 'description', 'tags']
         labels = {
             "title": "Blog Başlığı",
+            "text": "Blog İçeriği",
             "description": "Açıklama",
-            "banner" : "Kapak Görseli"
+            "banner": "Banner",
+            "tags" : "Etiketler",
 
         }
         widgets = {
             "title": forms.TextInput(attrs={"class":"form-control"}),
+            "text": forms.Textarea(attrs={"class":"form-control"}),
             "description":forms.Textarea(attrs={"class":"form-control"}),
-            "topics" : forms.TextInput(attrs={"class":"form-control"}),
-            "banner" : forms.FileInput(attrs={"class":"form-control"}),
+            "banner": forms.FileInput(attrs={"class": "form-control", "placeholder": "banner"}),
+            "tags" : TagWidget(attrs={"class":"form-control"}),
         }
-        error_messages = {
-            "title":{
-                "required" : "Blog başlığı girmelisiniz",
-                "max_length" : "Başlık uzunluğu maksimum 50 karakter",
-            },
-            "description" : {
-                "required" : "Açıklama bilgisi girilmesi zorunludur."
-            }
-        }
+
+class BannerPicForm(ModelForm):
+    banner = forms.ImageField(required=False, widget=forms.FileInput(attrs={"class": "form-control", "placeholder": "banner"}))
+
+    class Meta:
+        model = Blog
+        fields = ['banner']
+        
 
 
 class UploadForm(forms.ModelForm):
@@ -73,3 +78,10 @@ class EditorForm(forms.ModelForm):
         }
         
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'text' : forms.Textarea(attrs={"class":"form-control"})
+        }

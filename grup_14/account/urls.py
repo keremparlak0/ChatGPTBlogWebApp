@@ -12,5 +12,6 @@ urlpatterns = [
     path("logout", views.logout_request, name="logout"),
     path("update", views.update_request, name="update"),
     path("update/author", views.update_author_request, name="update-author"),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -1,7 +1,41 @@
-<!-- Profil Sayfası (Giriş Yapılmamış) -->
+<!-- Profil Sayfası (Giriş Yapılmamış) 
+http://127.0.0.1:8000/general/profile/vural
+-->
 {% extends 'layout.html'%}
 
+
 {% block content %}
+
+
+
 <h1> Profile </h1>
+<form action="{% url 'followers_count' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="user" value="{{ user.id }}" readonly>
+    <input type="hidden" name="follower" value="{{ author.user.id }}" readonly>
+    
+    {% if follow_button_value == "follow" %}
+    <input type="hidden" name="value" value="follow" readonly>
+    <button class="btn btn-primary btn-sm" type="submit" id="follow-btn1">Follow</button>
+    {% else %}
+    <input type="hidden" name="value" value="unfollow" readonly>
+    <button class="btn btn-danger btn-sm" type="submit" id="unfollow-btn1">Unfollow</button>
+    {% endif %}
+    
+</form>
+takipçiler:{{ followers_count }} takip edilenler:{{ followings_count }}
+{{ author.first_name }} {{ author.last_name }} <br>
+takip edenler:  <br>
+{% for follower in followers %}
+{{ follower.first_name }} {{ follower.last_name }} <br>
+{% endfor %}
+
+
+<br>
+
+<br>
+
+
+
 
 {% endblock content %}

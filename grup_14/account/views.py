@@ -19,6 +19,7 @@ from .forms import RegisterUserForm, AuthorForm, UpdateUserForm, UpdateAuthorFor
 from bs4 import BeautifulSoup
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import update_session_auth_hash
+from django.views.decorators.http import require_POST
 
 
 
@@ -84,7 +85,8 @@ def logout_request(request):
     return redirect('login')
 
 
-@login_required    
+@login_required   
+
 def update_request(request):
     if request.user.is_authenticated:
         user = request.user
@@ -114,7 +116,7 @@ def update_request(request):
     
 
 
-@login_required    
+@login_required   
 def update_author_request(request):
     if request.user.is_authenticated:
         user = request.user
@@ -138,8 +140,13 @@ def update_author_request(request):
                 return redirect("index")
         else:
             form = UserForm(instance=user)
-            author_form = UpdateAuthorForm(instance=author)
+            author_form = UpdateAuthorForm(instance=author, initial={
+                'first_name': author.user.first_name,
+                'last_name': author.user.last_name,
+                'email': author.user.email,
+            })
             profile_pic_form = ProfilePicForm(instance=author)
             if "submitted" in request.GET:
                 submitted = True
+
         return render(request, 'account/update_author.html', {'form': form, 'author_form': author_form, 'profile_pic_form': profile_pic_form, 'user': user, "submitted": submitted})

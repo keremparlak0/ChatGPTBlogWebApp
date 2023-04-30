@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'taggit',
     'author',
     'account',
-   
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -68,6 +68,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            'builtins': [
+                'widget_tweaks.templatetags.widget_tweaks',
+                
             ],
         },
     },
