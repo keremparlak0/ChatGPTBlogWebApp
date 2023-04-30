@@ -20,5 +20,5 @@ Projemizde programlama dili olarak Python, Web uygulama çatısı olarak Django,
 
 Ayrıca, projemizi daha da geniş kitlelere duyurmak için sizin gibi takipçilerimize de ihtiyacımız var. Eğer bu projeyi destekliyorsanız, LinkedIn ve diğer sosyal medya platformlarında projemizin bağlantısını paylaşarak daha fazla kişiye ulaşmasına yardımcı olabilirsiniz.
 
-Projimiz için finansal olarak da desteğe ihtiyacımız var. Uygulamanın canlıya alınacağı platform ve kullanılacak APIler için belli bir maliyetin altına girmiş bulunmaktayız. Gelecek vadedden projemize, finansal olarak destek vermek isterseniz bizimle iletişime geçebilirsiniz.
+Projemiz için finansal olarak da desteğe ihtiyacımız var. Uygulamanın canlıya alınacağı platform ve kullanılacak APIler için belli bir maliyetin altına girmiş bulunmaktayız. Gelecek vadedden projemize, finansal olarak destek vermek isterseniz bizimle iletişime geçebilirsiniz.
 
