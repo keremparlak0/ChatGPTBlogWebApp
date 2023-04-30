@@ -8,7 +8,7 @@
 
 ## Takım Üyeleri ve Görev Dağıılımı
 1. Yusuf T. ARABACI: Model Geliştirme ve Kullanımı (CRUD işlemleri), Erişim Kontrolü 
-2. Vural Bayraklı: Yapay Zeka Modelleme, Algoritma Geliştirme, Optimizasyon
+2. Vural Bayraklı: Algoritma Geliştirme ve Optimizasyon
 3. Kerem Parlak: ChatGPT API Çağrıları ve Etkileşimi, İstemci taraflı geliştirme
 4. E. Begüm Aykaç: Web Tasarım ve SEO Geliştirme
 
