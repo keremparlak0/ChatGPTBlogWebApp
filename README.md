@@ -7,10 +7,10 @@
 5. Gelişen yapay zeka teknolojisinin sunduğu imkanlardan blog yazarlarının ve okuyucuların yararlanmasını sağlamak.
 
 ## Takım Üyeleri ve Görev Dağıılımı
-1. Yusuf T. ARABACI: Model Geliştirme ve Kullanımı (CRUD işlemleri), Erişim Kontrolü 
-2. Vural Bayraklı: Algoritma Geliştirme ve Optimizasyon
+1. [Yusuf T. ARABACI](https://github.com/yusufarbc): Model Geliştirme ve Kullanımı (CRUD işlemleri), Erişim Kontrolü 
+2. [Vural Bayraklı](https://github.com/VuralBayrakli): Algoritma Geliştirme ve Optimizasyon
 3. [Kerem Parlak](https://github.com/keremparlak0): ChatGPT API Çağrıları ve Etkileşimi, İstemci taraflı geliştirme
-4. E. Begüm Aykaç: Web Tasarım ve SEO Geliştirme
+4. [E. Begüm Aykaç](https://github.com/begumaykac): Web Tasarım ve SEO Geliştirme
 5. Volkan Altuntaş(valtuntas@gmail.com): Proje sorumlusu
 
 ## Kullanılan Teknolojiler
