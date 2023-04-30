@@ -1,3 +1,28 @@
 <!-- Blog Sayfası -->
 {% extends 'layout.html' %}
 
+{% load static %}
+
+{% block title %} Blog {% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <h1> {{blog.title}} </h1>
+            <img src="{{blog.banner.url}}" alt="banner">
+            <div class="container">
+                {{blog.draft.content|safe}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+
+
+

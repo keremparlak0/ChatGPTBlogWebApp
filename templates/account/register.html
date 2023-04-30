@@ -10,7 +10,7 @@
     <div class="card">
         <div class="row">
             <div class="col-md-4 d-md-block">
-                <img src="img/logo1.png" id="logo1" alt="Logo">
+                <img src="{% static 'img/logo.png' %}" id="logo1" alt="Logo">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
@@ -20,7 +20,7 @@
 
 
 
-                    <form class="">
+                    <form class="form", method="POST">
                         {% csrf_token %}
                         {% if error %}
                             <div class="alert alert-danger">

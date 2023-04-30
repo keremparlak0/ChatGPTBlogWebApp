@@ -1,2 +1,25 @@
-<!-- Profil Sayfası (Giriş Yapılmamış) -->
+<!-- Blog Sayfası -->
 {% extends 'layout.html' %}
+
+{% load static %}
+
+{% block title %} Profil {% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <h1> {{profile.user.first_name}} {{profile.user.last_name}} </h1>
+            <div class="container">
+                <img src="{{profile.picture.url}}" alt="picture" width="200px">
+                <p></p>{{profile.about}}
+               <p></p> {{profile.contact}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

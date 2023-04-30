@@ -6,16 +6,14 @@ from author.models import *
 class PublishForm(forms.ModelForm):
     class Meta:
         model = Blog
-        fields = ['title', 'description', 'tags', 'banner']
+        fields = ['description', 'tags', 'banner']
         labels = {
-            "title": "Blog Başlığı",
             "description": "Açıklama",
             "banner" : "Kapak Görseli",
             "tags" : "etiketler",
 
         }
         widgets = {
-            "title": forms.TextInput(attrs={"class":"form-control"}),
             "description":forms.Textarea(attrs={"class":"form-control"}),
             "tags" : forms.TextInput(attrs={"class":"form-control"}),
             "banner" : forms.FileInput(attrs={"class":"form-control"}),
@@ -41,10 +39,11 @@ class PublishForm(forms.ModelForm):
 
 # Draft Model Form
 class Editor(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorWidget())
+    #content = forms.CharField(widget=CKEditorWidget())
     class Meta:
         model = Draft
-        fields = ['content']
+        fields = ['title','content']
+        widget = CKEditorWidget()
         
 
 # Author Model Form

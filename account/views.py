@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 def login_request(request):
     if request.user.is_authenticated:
-        return redirect("/author/panel")
+        return redirect("index")
 
     if request.method == "POST":
         username = request.POST["username"]
@@ -16,19 +16,17 @@ def login_request(request):
             login(request, user)
             nextUrl = request.GET.get("next",None)
             if nextUrl is None:
-                return redirect("/author/panel")
+                return redirect("index")
             else:
                 return redirect(nextUrl)
         else:
-            return render(request, "account/login.html", {
-                "error": "kullanıcı adı ya da parola yanlış"
-            })
+            return redirect("index")
 
     return render(request, "account/login.html")
 
 def register_request(request):
     if request.user.is_authenticated:
-        return redirect("home")
+        return redirect("index")
         
     if request.method == "POST":
         username = request.POST["username"]
@@ -61,7 +59,7 @@ def register_request(request):
                 else:
                     user = User.objects.create_user(username=username,email=email,first_name=firstname,last_name=lastname,password=password)
                     user.save()
-                    return redirect("login")                    
+                    return redirect("index")                    
         else:
             return render(request, "account/register.html", {
                 "error":"parola eşleşmiyor.",
@@ -77,3 +75,14 @@ def logout_request(request):
     logout(request)
     return redirect("index")
 
+# def re-captcha(request):
+
+# def password-recovery(request):
+
+# def email-validation(request):
+
+# def change-password(request):
+
+# def change-username(request):
+
+# def change-email(request):

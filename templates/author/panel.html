@@ -10,9 +10,33 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1>bloglar</h1>
+                <h1>blog Yazılarım</h1>
                 <hr>
-                {{blogs}}
+                <Table>
+                    <thead>
+                        <tr>
+                            <td>numara</td>
+                            <td>başlık</td>
+                            <td>işlemler</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {% for blog in blogs %}
+                            <tr>
+                            <td>{{blog.draft_id}}</td>
+                            <td>{{blog.title}}</td>
+                            <td>
+                                <a href="{% url 'editor' blog.draft_id %}" class="btn btn-primary">Düzenle</a>
+                                <a href="{% url 'delDraft' blog.draft_id %}" class="btn btn-danger">Sil</a>
+                            </td>
+                            </tr>
+                             {% endfor %}
+                            <tr>
+                                <a href="{% url 'newDraft' %}" class="btn btn-secondary">Yeni Yazı</a>
+                            </tr>
+                    </tbody>
+                </Table>
+                
             </div>
         </div>
     </div>

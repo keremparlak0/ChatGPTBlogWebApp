@@ -1,8 +1,40 @@
 <!-- Ana Sayfa -->
 {% extends 'layout.html'%}
 
+{% block title  %} Ana Sayfa {% endblock title  %}
+
 {% block content %}
 <h1>Ana Sayfa</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:120px;">banner</th>
+                        <th>title</th>
+                        <th>description</th>
+                        <th>link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for blog in blogs %}
+                        <tr>
+                            <td>
+                                <img src="{{ blog.banner.url }}" alt="banner" class="img-fluid">
+                            </td>
+                            <td>{{blog.title}}</td>
+                            <td>{{blog.description}}</td>
+                            <td>
+                                <a href="{% url 'blogbyslug' blog.slug %}"> Link </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}
 

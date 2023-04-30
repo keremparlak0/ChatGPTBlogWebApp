@@ -1,35 +1,84 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 
 from author.forms import *
 from author.models import *
 
 
-# Create your views here.
-
-# session kontrolü yapılacak
-
 # site/author/editor
 # template: author/editor.html   #ckeditor
 @login_required()
-def editor(request):
-    if request.method == 'POST':
-        form = Editor(request.POST)
+def newDraft(request):
+    author = Author.objects.get(user = request.user)
+    draft = Draft(content = "", title="", author = author)
+    draft.save()
 
-        author = Author.objects.get(user = request.user)
+    return redirect("panel")
 
-        if form.is_valid():
-            draft = Draft(content=form.cleaned_data["content"], author= author)
-            draft.save() 
-        return HttpResponse("Yazı oluşturuldu")
+# site/author/editor/<draft_id>
+# template: author/editor.html   #ckeditor
+@login_required()
+def editor(request, draft_id):
+    draft = get_object_or_404(Draft, pk=draft_id)
+    author = Author.objects.get(user = request.user)
+
+    # if author own this draft
+    if draft.author == author:
+        if request.method == 'POST':
+            form = Editor(request.POST, instance=draft)
+            form.save()
+            return render(request, 'author/editor.html', {"form":form, "draft":draft})
+        else:
+            form = Editor(instance=draft)
+            return render(request, 'author/editor.html', {"form":form, "draft":draft})
     else:
-        form = Editor()
-        context = {
-            'form':form
-        }
-        return render(request, 'author/editor.html', context)
+        return HttpResponse("Yetkisiz erişim")
 
+    
+@login_required
+def delDraft(request, draft_id):
+    draft = get_object_or_404(Draft, pk=draft_id)
+    author = Author.objects.get(user = request.user)
+
+    # if author own this draft
+    if draft.author == author:
+        if request.method == 'POST':
+            draft.delete()
+            return redirect("panel")
+        else:
+            return render(request, "author/confirm.html", {"contex":draft.title})
+    else:
+        return HttpResponse("Yetkisiz erişim")
+
+
+# site/author/publish/<draft_id>
+# template: author/publish.html
+@login_required()
+def publish(request, draft_id):
+    record = get_object_or_404(Draft, pk=draft_id)
+    author = Author.objects.get(user = request.user)
+
+    # if author own this draft
+    if record.author == author:
+        if request.method == "POST":
+            form = PublishForm(request.POST, request.FILES)
+            if form.is_valid():
+                blog = Blog(
+                    author = author,
+                    draft = record,
+                    tags = form.cleaned_data["tags"],
+                    banner = request.FILES["banner"],
+                    description = form.cleaned_data["description"],
+                )
+                blog.save()
+                return redirect("panel")
+        else:
+            form = PublishForm()
+
+        return render(request, "author/publish.html", {"form":form})
+    else:
+        return HttpResponse("Yetkisiz erişim")
 
 
 # site/author/panel
@@ -37,11 +86,10 @@ def editor(request):
 @login_required()
 def panel(request):
     author = Author.objects.get(user = request.user)
-    print(author)
-    blogs = Blog.objects.get(author=author)
-    blogs = blogs.title
-    print(blogs)
-
+    
+    blogs = {""}
+    blogs = Draft.objects.all().filter(author=author)
+    
     return render(request, "author/panel.html", {"blogs":blogs})
 
 # site/author/update/
@@ -65,41 +113,7 @@ def update(request):
         context = {
             'form':form
         }
-    return render(request, 'author/update.html', context)
-
-
-
-# site/author/publish/?draft=draft_id
-# template: author/publish.html
-@login_required()
-def publish(request):
-    draft = request.GET.get("draft", None)
-    record = Draft.objects.get(id=draft)
-    author = Author.objects.get(user = request.user)
-
-    # if author own this draft
-    if record.author == author:
-        if request.method == "POST":
-            form = PublishForm(request.POST, request.FILES)
-            if form.is_valid():
-                blog = Blog(
-                    author = author,
-                    draft = record,
-                    tags = form.cleaned_data["tags"],
-                    banner = request.FILES["banner"],
-                    title = form.cleaned_data["title"],
-                    description = form.cleaned_data["description"],
-                )
-                blog.save()
-                return HttpResponse("blog başaryla oluşturuldu")
-        else:
-            form = PublishForm()
-
-        return render(request, "author/publish.html", {"form":form})
-    else:
-        return HttpResponse("Yetkisiz erişim")
-
-
+        return render(request, 'author/update.html', context)
 
 # site/author/upload
 # template: author/library.html

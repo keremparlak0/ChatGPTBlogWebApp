@@ -1,10 +1,11 @@
-{% if user.is_authanticate %}
+{% load static %}
+{% if request.user.is_authanticate %}
 <!-- Giriş Yapıldığında Navbar -->
 
 <nav class="navbar navbar-expand-md fixed-top">
     <div class="container-fluid">
         <a href="#anasayfa">
-            <img src="img/logo2.png" alt="Logo">
+            <img src="{% static 'img/logo2.png' %}" alt="Logo">
         </a>
 
         <button type="button" class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
@@ -95,7 +96,7 @@
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
         <a href="#anasayfa">
-            <img src="img/logo2.png" alt="Logo">
+            <img src="{% static 'img/logo2.png' %}" alt="Logo">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"

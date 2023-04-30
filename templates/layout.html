@@ -8,15 +8,18 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>
-        {% block title %} {%endblock%} | Blogapp</title>
+        {% block title %} {%endblock%} | AIBlog</title>
 </head>
 <body>
     {% include 'partials/_navbar.html' %}
-   
+    {% include 'partials/_menu.html' %}
+
     {% block content %}{% endblock %}
 
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/chatGPT.js' %}"></script>
+
+    {% include 'partials/_footer.html' %}
 </body>
 </html>

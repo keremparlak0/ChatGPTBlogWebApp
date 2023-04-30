@@ -12,6 +12,9 @@
 
     <input type="submit" value="Submit">
 </form>
+<div>
+    <a href="{% url 'publishDraft' draft.draft_id %}" class="btn btn-primary"> Yayınla </a>
+</div>
 
 <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
 <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>

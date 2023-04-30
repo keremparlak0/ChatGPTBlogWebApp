@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block title %} Login {% endblock title %} 
+
+
+{% block content %}
+
+
+
+            <div>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            {{error}}
+                        </div>
+                    {% endif %}
+                    <div class="">
+                        <label for="floatingInput" class="col-form-label">Username</label>
+                        <input type="username" name="username" placeholder="name@example.com" class="form-control"
+                            id="email">
+                    </div>
+
+                    <div class="">
+                        <label for="password1" class="col-form-label">Şifre</label>
+                        <input type="password" name="password" placeholder="Password" class="form-control"
+                            id="password">
+                    </div>
+
+                    <div class="k1">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Beni hatırla</label>
+                        </div>
+                        <div class="">
+                            <a href="#">Şifremi unuttum</a>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button type="submit" value="Login" class="btn w-100 btnRenk" data-bs-dismiss="modal" id="girisBtn" aria-label="Giriş Yap">
+                            Giriş
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+
+
+
+
+
+
+{% endblock content %}
+
