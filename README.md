@@ -9,8 +9,9 @@
 ## Takım Üyeleri ve Görev Dağıılımı
 1. Yusuf T. ARABACI: Model Geliştirme ve Kullanımı (CRUD işlemleri), Erişim Kontrolü 
 2. Vural Bayraklı: Algoritma Geliştirme ve Optimizasyon
-3. Kerem Parlak: ChatGPT API Çağrıları ve Etkileşimi, İstemci taraflı geliştirme
+3. [Kerem Parlak](https://github.com/keremparlak0): ChatGPT API Çağrıları ve Etkileşimi, İstemci taraflı geliştirme
 4. E. Begüm Aykaç: Web Tasarım ve SEO Geliştirme
+5. Volkan Altuntaş(valtuntas@gmail.com): Proje sorumlusu
 
 ## Kullanılan Teknolojiler
 Projemizde programlama dili olarak Python, Web uygulama çatısı olarak Django, ChatGPT çağrıları için JavaScript, Web tasarımı için Bootstrap çatısı kullanılmaktadır.
@@ -20,5 +21,5 @@ Projemizde programlama dili olarak Python, Web uygulama çatısı olarak Django,
 
 Ayrıca, projemizi daha da geniş kitlelere duyurmak için sizin gibi takipçilerimize de ihtiyacımız var. Eğer bu projeyi destekliyorsanız, LinkedIn ve diğer sosyal medya platformlarında projemizin bağlantısını paylaşarak daha fazla kişiye ulaşmasına yardımcı olabilirsiniz.
 
-Projemiz için finansal olarak da desteğe ihtiyacımız var. Uygulamanın canlıya alınacağı platform ve kullanılacak APIler için belli bir maliyetin altına girmiş bulunmaktayız. Gelecek vadedden projemize, finansal olarak destek vermek isterseniz bizimle iletişime geçebilirsiniz.
+Projemiz için finansal olarak da desteğe ihtiyacımız var. Uygulamanın canlıya alınacağı platform ve kullanılacak APIler için belli bir maliyetin altına girmiş bulunmaktayız. Gelecek vaadeden projemize, finansal olarak destek vermek isterseniz bizimle iletişime geçebilirsiniz.
 
