@@ -1,5 +1,5 @@
 {% load static %}
-{% if request.user.is_authanticate %}
+{% if user.is_authenticated %}
 <!-- Giriş Yapıldığında Navbar -->
 
 <nav class="navbar navbar-expand-md fixed-top">
@@ -41,7 +41,7 @@
             <!--Profil iconu -->
             <div class="dropdown me-4">
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="img/profil.png" alt="profil" class="btnProfile">
+                  <img src="{% static 'img/profil.png' %}" alt="profil" class="btnProfile">
                 </a>
 
                     <ul class="dropdown-menu dropdown-menu-end">
