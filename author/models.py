@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
+from taggit.managers import TaggableManager
 
 class Author(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -40,7 +41,10 @@ class Blog(models.Model):
     tags = models.CharField(max_length=500)
     date = models.DateField(auto_now=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    like_count = models.PositiveIntegerField(default=0)
+    likes = models.ManyToManyField(User, related_name='blog_posts')
+    tags = TaggableManager()
+    interaction = models.IntegerField(default=0)
+    
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.draft.title)
