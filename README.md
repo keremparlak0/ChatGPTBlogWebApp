@@ -23,3 +23,5 @@ Ayrıca, projemizi daha da geniş kitlelere duyurmak için sizin gibi takipçile
 
 Projemiz için finansal olarak da desteğe ihtiyacımız var. Uygulamanın canlıya alınacağı platform ve kullanılacak APIler için belli bir maliyetin altına girmiş bulunmaktayız. Gelecek vaadeden projemize, finansal olarak destek vermek isterseniz bizimle iletişime geçebilirsiniz.
 
+## Proje Geliştirme Modeli
+Proje geliştirme modeli olarak Kodla Ve Düzelt Yaşam Döngü Modeli kullanılmaktadır. Bu model ile amacımız hızlı bir geliştirme safhası geçirmek ve ardından projeyi test ederek hataları düzeltmek, varsa eksikleri gidermek. 
