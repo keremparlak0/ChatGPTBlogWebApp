@@ -7,6 +7,178 @@
 
 {% block content %}
 
+<div class="container publish">
+    <h1>Kullanıcı Ayarları</h1>
+    <hr>
+    <form>
+        
+        <div class="mb-3" data-bs-toggle="modal" data-bs-target="#modal1">
+            <label for="username" class="form-label">Kullanıcı Adı</label>
+        </div>
+
+
+        <div class="mb-3" data-bs-toggle="modal" data-bs-target="#modal2">
+            <label for="email" class="form-label">E-posta Adresiniz</label>
+        </div>
+
+        <div class="mb-3" data-bs-toggle="modal" data-bs-target="#modal3">
+            <label for="password" class="form-label">Şifreniz</label>
+        </div>            
+    </form>
+
+
+    <div class="d-flex justify-content-center">
+        <div class="mx-3 mb-3" data-bs-toggle="modal" data-bs-target="#modal4">
+            <button class="btn btn-danger">Hesabı Dondur</button>
+        </div>
+    
+        <div class="mx-3 mb-3" data-bs-toggle="modal" data-bs-target="#modal5">
+            <button class="btn btn-danger">Hesabı Sil</button>
+        </div>
+    </div>
+    
+    
+
+</div>
+
+<!-- kullanıcı adı değişimi -->
+<div class="modal fade" id="modal1">
+    <div class="modal-dialog custom-modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Kullanıcı Adını Güncelle</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="">
+                    <label for="floatingInput" class="col-form-label">Kullanıcı Adı</label>
+                    <input type="text" name="username" class="form-control" id="username">
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="submit" class="btn btnRenk">Güncelle</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+ <!-- eposta adı değişimi -->
+ <div class="modal fade" id="modal2">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">E-postanı Güncelle</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="">
+                    <label for="floatingInput" class="col-form-label">E-posta</label>
+                    <input type="mail" name="mail" class="form-control" id="mail">
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="submit" class="btn btnRenk">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- şifre değişimi -->
+  <div class="modal fade" id="modal3">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Şifreni Güncelle</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="">
+                    <label for="floatingInput" class="col-form-label">Şifreniz</label>
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
+
+                <div class="mt-2">
+                    <label for="floatingInput" class="col-form-label">Yeni Şifreniz</label>
+                    <input type="password" name="repassword" class="form-control" id="repassword">
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="submit" class="btn btnRenk">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- Hesap Dondur -->
+ <div class="modal fade" id="modal4">
+    <div class="modal-dialog custom-modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Hesap Dondurma</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="">
+                   <p>Dondurma işlemini gerçekleştirerek hesabınızı AI Blogdan kaldırabilirsiniz. Hesabınızı herhangi 
+                    bir zamanda yeniden etkinleştirmek ve içeriğini geri yüklemek için tekrar oturum açabilirsiniz.</p>
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="submit" class="btn btn-danger">Dondur</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+ <!-- Hesap Sil -->
+ <div class="modal fade" id="modal5">
+    <div class="modal-dialog custom-modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Hesap Silme</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="">
+                   <p>Hesabınız silindiğinde, profiliniz, yazılarınız, yayınlarınız, notlarınız ve cevaplarınız 
+                    dahil olmak üzere tüm içeriğiniz kalıcı olarak silinecektir.</p>
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="submit" class="btn btn-danger">Sil</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
 <div class="container mt-3">
     <div class="col">
         <h1>Update</h1>
