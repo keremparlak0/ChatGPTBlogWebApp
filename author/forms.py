@@ -65,10 +65,6 @@ class UpdateForm(forms.ModelForm):
         }
 
 # Follow Model Form
-class FollowForm(forms.ModelForm):
-    class Meta:
-        model = Follow
-        fields = '__all__'
 
 
 
@@ -76,4 +72,7 @@ class FollowForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comments
-        fields = '__all__'
+        fields = ['message']
+        widgets = {
+            'text' : forms.Textarea(attrs={"class":"form-control"})
+        }
