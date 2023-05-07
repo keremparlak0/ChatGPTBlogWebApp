@@ -22,7 +22,6 @@ class Author(models.Model):
         return self.id
 
 class Draft(models.Model):
-    
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = RichTextUploadingField()
@@ -44,6 +43,7 @@ class Blog(models.Model):
     likes = models.ManyToManyField(User, related_name='blog_posts')
     tags = TaggableManager()
     interaction = models.IntegerField(default=0)
+    favorite = models.ManyToManyField(User, related_name='favorite_posts', blank=True)
     
 
     def save(self, *args, **kwargs):
@@ -67,6 +67,7 @@ class Comments(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=500)
     date = models.DateField(auto_now=True)
+    reply = models.ForeignKey("Comments",on_delete=models.DO_NOTHING, blank=True, null=True)
 
     @property
     def comment_id(self):
