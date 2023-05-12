@@ -13,6 +13,7 @@ def index(request):
 
 def getProfileBySlug(request, profile_slug):
     profile = Author.objects.get(slug=profile_slug)
+    user = request.user
     
     if request.method == 'POST':
         if request.user.is_authenticated:
@@ -20,11 +21,11 @@ def getProfileBySlug(request, profile_slug):
         else:
             return redirect("login")
             
-    is_follow = Follow.objects.check(user_id=request.user, author_id=profile)    
-    if Follow.objects.filter(user_id=request.user, author_id=profile).exists():
+    #is_follow = Follow.objects.check(user_id=request.user, author_id=profile)    
+    if Follow.objects.filter(user_id=user, author_id=profile).exists():
         button_name = "Unfollow"
     else:
-        button_name = "follow"      
+        button_name = "follow"          
 
     context = {
         'profile': profile,
@@ -34,13 +35,18 @@ def getProfileBySlug(request, profile_slug):
 
 def getProfileByID(request, profile_id):
     profile = Author.objects.get(id=profile_id)
+    user = request.user
+
+    print(profile)
+    print(user)
+
     if request.method == 'POST':
         if request.user.is_authenticated:
             follow(request,profile)
         else:
             return redirect("login")
 
-    if Follow.objects.filter(user_id=request.user, author_id=profile).exists():
+    if Follow.objects.filter(user_id=user, author_id=profile).exists():
         button_name = "Unfollow"
     else:
         button_name = "follow"        

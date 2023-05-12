@@ -25,7 +25,10 @@
                     </div>
                     <div class="profile-name">
                         <h2 class="text-center"> {{profile.user.first_name}} {{profile.user.last_name}}
-                          <button type="button" id="follow-btn" class="follow-button profileBtn" onclick="followUser()">
+                            <form action="" method='POST'>
+                                {% csrf_token %}
+                                <button type=submit class="btn btn-primary"> {{button_name}} </button>
+                            </form>
                               <i class="fa-solid fa-xs fa-user-plus"></i>
                             </button>
                         </h2>
@@ -63,29 +66,5 @@
 
         </div>
     </div>
-
-<div class="container">
-    <div class="row">
-        <div class="col-10">
-            <h1> {{profile.user.first_name}} {{profile.user.last_name}} </h1>
-            <div class="container">
-                <img src="{{profile.picture.url}}" alt="picture" width="200px">
-                <p></p>{{profile.about}}
-               <p></p> {{profile.contact}}
-            </div>
-        </div>
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-2">
-            <form action="" method='POST'>
-                {% csrf_token %}
-                <button type=submit class="btn btn-primary"> {{button_name}} </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-
 
 {% endblock content %}
