@@ -1,0 +1,11 @@
+http://127.0.0.1:8000/index	anasayfa
+http://127.0.0.1:8000/admin	admin paneli
+http://127.0.0.1:8000/account/login	giriş sayfası
+http://127.0.0.1:8000/account/register	kayıt sayfası
+http://127.0.0.1:8000/account/logout 	çıkış sayfası
+http://127.0.0.1:8000/author/panel	yazar paneli
+http://127.0.0.1:8000/author/update	yazar profil güncelleme
+http://127.0.0.1:8000/author/editor/new		yeni taslak oluştur
+http://127.0.0.1:8000/author/editor/<draft_id>	taslağı düzenle
+http://127.0.0.1:8000/author/editor/delete/<draft_id>	taslağı sil
+http://127.0.0.1:8000/author/publish/<draft_id>		taslağı yayınla
