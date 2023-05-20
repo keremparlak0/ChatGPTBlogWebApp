@@ -77,7 +77,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{% url 'logout' %}">
                                 <i class="fa-solid fa-right-from-bracket fa-sm"></i>
                                 &nbsp;Çıkış yap
                             </a>
@@ -130,10 +130,10 @@
 
                 <li class="nav-item">
                     <div class="ms-auto d-flex">
-                        <button type="button" class="btn btnG me-4" data-bs-target="#modal"
+                        <a href="{% url 'login' %}" type="button" class="btn btnG me-4" data-bs-target="#modal"
                             data-bs-toggle="modal" aria-label="Giriş Yap">
                             Giriş Yap
-                        </button>
+                        </a>
                     </div>
                 </li>
 

@@ -23,7 +23,7 @@
 {% if user.is_authenticated %}
     <form action="/blog/{{ blog.id }}/like" method="post">
         {% csrf_token %}
-        <button class="btn btn-primary btn-sm" type="submit" name="blog_id" value="{{ blog.id }}"> {{ blog.total_likes }} like </button>
+        <button class="btn btn-primary btn-sm" type="submit" name="blog_id" value="{{ blog.id }}"> {{ blog.total_likes }} beğen </button>
     </form>
 {% else %}
     <p> You need to login to like </p>
@@ -34,26 +34,25 @@
 {% for comment in comments %}
     {{ comment.user_id }} {{ comment.date }}<br> {{ comment.message }} 
     {% if user.is_authenticated and user == comment.user_id %}
-        <form action="{% url 'delete_comment' comment.id %}" method="POST">
+        <form action="{% url 'commentAction' 0 comment.id %}" method="POST">
             {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            <button type="submit" class="btn btn-sm btn-danger">Sil</button>
         </form>
     {% endif %}
     <br> <br> <br>
 {% endfor %}
 {% else %}
-    <p> No comments yet </p>
+    <p> Henüz Bir Yorum Yok </p>
 {% endif %}
 
 {% if user.is_authenticated %}
-    <form action="/blog/{{ blog.id }}/comment" method="post">
+    <form action="{% url 'commentAction' blog.id %}" blog method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Comment">
+        <input type="submit" value="Yorum">
     </form>
 {% else %}
     <p> You need to login to comment </p>
 {% endif %}
-
 
 {% endblock content %}

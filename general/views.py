@@ -1,15 +1,32 @@
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from author.forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from author.models import *
 
+
 def index(request):
-    blogs = Blog.objects.all()
+    # ana sayfaya giriş
+    if request.method == "GET":
+        blogs = Blog.objects.all()
+        # blog = recommendation   ~Vural
+        # ana sayfa yazı öneri algoritması
+        return render(request, 'general/index.html', {"blogs":blogs})
     
-    # ana sayfa yazı öneri algoritması
-    return render(request, 'general/index.html', {"blogs":blogs})
-    
+    # arama işlemi 
+    elif request.method == "POST":
+        #search()    ~Vural
+        pass
+    else:
+        return HttpResponse("Error")
+
+def search():
+    pass
+
+def recommendation(): 
+    pass
+
 
 def getProfileBySlug(request, profile_slug):
     profile = Author.objects.get(slug=profile_slug)
@@ -84,48 +101,8 @@ def getBLogById(request, blog_id):
     return render(request, 'general/blog.html', context)
 
 
-@login_required
-def comment(request, blog_id):
-    blog = Blog.objects.get(pk=blog_id)
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user_id = request.user
-            comment.blog_id = blog
-            comment.save()
-            return redirect('/blog/'+str(blog_id))
-    else:
-        form = CommentForm()
-    return render(request, 'general/comment.html', {'form': form})
 
-
-@login_required
-def delete_comment(request, comment_id):
-    comment = get_object_or_404(Comments, pk=comment_id)
-    blog = comment.blog_id
-    if request.user == comment.user_id:
-        comment.delete()
-        
-    return redirect('blogbyslug',blog.slug)
-
-# @login_required
-# def edit_comment(request, comment_id):
-#     comment = get_object_or_404(Comments, pk=comment_id)
-#     if request.user == comment.user_id:
-#         if request.method == 'POST':
-#             form = CommentForm(request.POST, instance=comment)
-#             if form.is_valid():
-#                 comment = form.save(commit=False)
-#                 comment.name = request.user
-#                 comment.save()
-#                 return redirect('/blog/'+str(comment.blog.id))
-#         else:
-#             form = CommentForm(instance=comment)
-#         return render(request, 'general/comment.html', {'form': form})
-#     else:
-#         return redirect('/blog/'+str(comment.blog.id))
-    
+@login_required 
 def follow(request, profile):
     try:
         #if follow exist
@@ -155,3 +132,30 @@ def like(request, blog_id):
         blog.likes.add(request.user)
     
     return redirect('blogbyslug',blog.slug)
+
+
+
+@login_required
+def commentAction(request, blog_id=0 ,comment_id=0):
+    if request.method == "POST":
+
+        if comment_id==0:
+            #create
+            blog = Blog.objects.get(pk=blog_id)
+            comment = Comments(
+                blog_id = blog,
+                user_id = request.user,
+                message = request.POST["message"]
+            )
+            comment.save()
+
+        elif blog_id==0:
+            #delete
+            comment = get_object_or_404(Comments, pk=comment_id)
+            if request.user == comment.user_id:
+                comment.delete()   
+        # else:
+        #     #update
+        #     pass
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
