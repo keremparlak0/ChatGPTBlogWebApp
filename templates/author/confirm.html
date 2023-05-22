@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block title %} Confirm {% endblock title %}
+
+{% block content %} 
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <p>
+                <strong>{{context}}</strong>'i silmek istiyormusunuz?
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger"> Sil </button>
+            <a href="{% url 'panel' %}" class="btn btn-primary"> Vazgeç </a>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %} 

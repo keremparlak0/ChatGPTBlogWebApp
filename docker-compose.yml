@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  appVural:
+    build: .  
+    volumes:
+      - .:/CHATGPT
+    ports:
+      - "8000:8000"
+    
+    image: django
+    container_name: django_container
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+
+  db:
+
+    image: postgres
+    container_name: postgres_container
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Vural
+      - POSTGRES_DB=grup_14
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+    ports:
+      - "5050:80"
+    restart: always
+
+  zemberek:
+    image: ryts/zemberek-grpc
+    container_name: zemberek_container
+    ports:
+      - "6789:6789"
+
+  
