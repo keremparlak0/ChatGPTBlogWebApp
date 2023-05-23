@@ -18,6 +18,9 @@ from .zemberekkk import MyService
 from taggit.models import Tag, TaggedItem
 from django.db import connections
 from django.db.models import Max
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 def koklerine_ayir(text):
     object1 = MyService()
@@ -78,14 +81,36 @@ def metni_ara(query1):
 
     return posts
 
+# tag lara göre öneri için en çok bulunan tagları alıyoruz
+def get_most_common_tags(num_tags=5):
+    most_common_tags = TaggedItem.objects.values('tag_id').annotate(tag_count=Count('tag_id')).order_by('-tag_count')[:num_tags]
+    most_common_tag_ids = [tag['tag_id'] for tag in most_common_tags]
+    return most_common_tag_ids
+
+# tag lara göre öneri için blogları alıyoruz
+def get_posts_with_most_common_tags(num_tags=5):
+    most_common_tag_ids = get_most_common_tags(num_tags)
+    posts_with_most_common_tags = Blog.objects.filter(tags__id__in=most_common_tag_ids).order_by('-date')
+    return posts_with_most_common_tags
+
+def get_recommendations(user, limit=10):
+    # Kullanıcının beğendiği gönderileri ve bu gönderilerin etiketlerini al
+    liked_posts = UserLikedPost.objects.filter(user=user)
+    liked_tags = Tag.objects.filter(userlikedpost__in=liked_posts).distinct()
+
+    # Etiketlere sahip gönderileri çek
+    recommended_posts = Blog.objects.filter(tags__in=liked_tags).exclude(liked_by__user=user).distinct().order_by('-interaction')[:limit]
+
+    return recommended_posts
+
 def index(request):
-    tags = Tag.objects.all()
-    print(tags)
+    
     query1 = request.GET.get('query')
     if query1:
         deger = koklerine_ayir(query1)
         print(deger)
         posts = metni_ara(query1)
+        posts = posts.order_by('-interaction', '-date')
         return render(request, 'general/index.html', {'blogs': posts})
         
     if request.method == "GET":
@@ -97,21 +122,24 @@ def index(request):
 
         
         # Takipçilerin gönderileri
-        kullanici = request.user
-        takip_edilenler = Follow.objects.filter(user_id=kullanici)
-        takip_edilen_kisiler = Author.objects.filter(id__in=takip_edilenler)
-        takip_edilenler = Follow.objects.filter(user_id=kullanici)
-        author_ids = takip_edilenler.values_list('author_id', flat=True)
-        takip_edilen_yazilar = Blog.objects.filter(author__in=author_ids)
+        if request.user.is_authenticated:
+            kullanici = request.user
+            takip_edilenler = Follow.objects.filter(user_id=kullanici)
+            takip_edilen_kisiler = Author.objects.filter(id__in=takip_edilenler)
+            takip_edilenler = Follow.objects.filter(user_id=kullanici)
+            author_ids = takip_edilenler.values_list('author_id', flat=True)
+            takip_edilen_yazilar = Blog.objects.filter(author__in=author_ids)
 
-        # En çok beğenilen gönderiler
-        most_liked_posts = Blog.get_most_liked_posts(limit=10)  # En çok beğenilen ve en yeni 5 yazıyı alın
+            # En çok beğenilen gönderiler
+            most_liked_posts = Blog.get_most_liked_posts(limit=10)  # En çok beğenilen ve en yeni 5 yazıyı alın
 
-        # Önerilen gönderiler
-        recommended_posts = get_recommendations(user=request.user, limit=10)
+            # Önerilen gönderiler
+            recommended_posts = get_recommendations(user=request.user, limit=10)
             
+            # taglara göre öneri
+            posts_with_most_common_tags = get_posts_with_most_common_tags(num_tags=5)
         
-        return render(request, 'general/index.html', {"blogs":blogs, "most_read_posts":most_read_posts, "most_liked_posts":most_liked_posts, "recommended_posts":recommended_posts, "takip_edilen_kisiler":takip_edilen_kisiler, "takip_edilen_yazilar":takip_edilen_yazilar})
+        return render(request, 'general/index.html', {"blogs":blogs})
     
     # arama işlemi 
     elif request.method == "POST":
@@ -123,15 +151,7 @@ def index(request):
 def search():
     pass
 
-def get_recommendations(user, limit=10):
-    # Kullanıcının beğendiği gönderileri ve bu gönderilerin etiketlerini al
-    liked_posts = UserLikedPost.objects.filter(user=user)
-    liked_tags = Tag.objects.filter(userlikedpost__in=liked_posts).distinct()
 
-    # Etiketlere sahip gönderileri çek
-    recommended_posts = Blog.objects.filter(tags__in=liked_tags).exclude(liked_by__user=user).distinct().order_by('-interaction')[:limit]
-
-    return recommended_posts
 
 
 def getProfileBySlug(request, profile_slug):
