@@ -7,6 +7,44 @@
 
 {% block content %}
 
+  <!------------------ İçerik ------------------>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 editor">
+        <form action="/publish">
+          <div class="mb-3">
+            <label for="title" class="form-label"></label>
+            <input type="text" class="form-control" id="title" placeholder="Başlık giriniz">
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label"></label>
+            <textarea class="form-control" id="content" placeholder="Metin giriniz"></textarea>
+          </div>
+          <div class="mb-3 d-flex justify-content-end">
+            <button class="btn btnRenk me-2" type="button" id="publish">Yayınla</button>
+            <button class="btn btnRenk" type="button" id="save">Kaydet</button>
+          </div>
+        </form>
+      </div>   
+    
+      <!-- Öneri Kısmı -->
+      <div class="col-lg-4">
+        <div class="sticky-top">
+          <div class="suggestion">
+            <h5>Öneri</h5>
+            <hr>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, voluptas sequi tenetur, mollitia beatae tempore tempora dignissimos nemo exercitationem facere rerum id perspiciatis quod sapiente iste ea, possimus magnam cupiditate.</p>
+            <button type="button" id="add" class="btn btnRenk">Ekle</button>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+  
+  
+
 <div class="container">
   <div class="row">
     <div class="col-lg-8 editor">

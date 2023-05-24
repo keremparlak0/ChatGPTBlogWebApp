@@ -253,6 +253,14 @@ margin-top: 1rem;
   width: 250px;
 }
 
+#logoG {
+  margin-left: 50px;
+  margin-top: 80px;
+  max-width: 100%;
+  height: auto;
+  width: 250px;
+}
+
 .bold-large {
   font-weight: bolder;
   font-size: larger;
@@ -288,8 +296,8 @@ margin-top: 1rem;
 }
 
 .profile-image {
-  width:120px;
-  height:120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 
@@ -324,8 +332,17 @@ margin-top: 1rem;
   position: absolute;
   bottom: 0;
   right: 0;
-  margin: 10px;
-  color: blue;
+  margin-right: 50px;
+  margin-bottom: 7px;
+
+}
+
+.text-edit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-right: 20px;
+  margin-bottom: 15px;
 }
 
 .button-container {
@@ -420,3 +437,66 @@ margin-top: 1rem;
   padding-right: 25px;
   border-radius: 8px;
 }
+
+.profile-image2 {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+.profile-info {
+  margin-left: 10px;
+}
+
+.author-details {
+  margin-top: 10px;
+  margin-left: 35px;
+}
+
+.stats p {
+  display: inline-block;
+  margin-right: 2px;
+}
+
+.stats .separator {
+  display: inline-block;
+  margin: 0 5px;
+  border-left: 1px solid #000;
+  height: 10px;
+  vertical-align: middle;
+}
+
+.author-info { 
+  background-color: white;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 20%);
+  border-radius: 8px;
+  padding: 16px;
+  margin-left: 35px;
+  margin-top: 75px;
+}
+
+.blog-info p {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.stil1 {
+  color: #8cbdce;
+  font-weight: 600;
+  text-shadow: 0 0 1px rgb(46, 46, 87);
+}
+
+.stil2 {
+  color: #8cbdce;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-shadow: 0 0 1px rgb(46, 46, 87);
+}
+
+/* Hakkında */
+#edit-btn {
+  display: flex;
+  justify-content: left;
+}
+
