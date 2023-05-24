@@ -7,26 +7,25 @@
 
 {% block content %}
 
-  <!------------------ İçerik ------------------>
+  <!-- İçerik -->
 
   <div class="container">
+
+
     <div class="row">
       <div class="col-lg-8 editor">
-        <form action="/publish">
           <div class="mb-3">
-            <label for="title" class="form-label"></label>
-            <input type="text" class="form-control" id="title" placeholder="Başlık giriniz">
-          </div>
-          <div class="mb-3">
-            <label for="content" class="form-label"></label>
-            <textarea class="form-control" id="content" placeholder="Metin giriniz"></textarea>
+            <form method="post">
+              {% csrf_token %}
+              {{form}}
+            
+              <button type="submit" value="submit" class="btn btnRenk" type="button" id="save">Kaydet</button>
+            </form>
           </div>
           <div class="mb-3 d-flex justify-content-end">
-            <button class="btn btnRenk me-2" type="button" id="publish">Yayınla</button>
-            <button class="btn btnRenk" type="button" id="save">Kaydet</button>
-          </div>
-        </form>
-      </div>   
+            <a href="{% url 'publishDraft' draft.draft_id %}" class="btn btn-primary"> Yayınla </a>       
+        </div>
+    </div>   
     
       <!-- Öneri Kısmı -->
       <div class="col-lg-4">
@@ -45,42 +44,6 @@
   
   
 
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 editor">
-      <form action="/publish">
-        <div class="mb-3">
-          <label for="titleInput" class="form-label"></label>
-          <input type="text" class="form-control" id="titleInput" placeholder="Başlık giriniz">
-        </div>
-        <div class="mb-3">
-          <label for="content" class="form-label"></label>
-          <textarea class="form-control" id="content" placeholder="Metin giriniz"></textarea>
-        </div>
-        <div class="mb-3 d-flex justify-content-end">
-          <button class="btn btnRenk me-2" type="button" id="publish">Yayınla</button>
-          <button class="btn btnRenk" type="button" id="save">Kaydet</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Öneri Kısmı --> 
-    <div class="col-lg-4" id="suggestion-div">
-      <!--Bu kısımda div içerisine öneri mesajı girilecek, istek yapıldığında sayfanın sağında oluşacaktır.-->
-    </div>
-
-  </div>
-</div>
-
-<form method="post">
-  {% csrf_token %}
-  {{form.as_p}}
-
-  <input type="submit" value="Submit">
-</form>
-<div>
-  <a href="{% url 'publishDraft' draft.draft_id %}" class="btn btn-primary"> Yayınla </a>
-</div>
 
 <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
 <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>

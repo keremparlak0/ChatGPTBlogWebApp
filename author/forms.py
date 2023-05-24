@@ -43,7 +43,10 @@ class Editor(forms.ModelForm):
     class Meta:
         model = Draft
         fields = ['title','content']
-        widget = CKEditorWidget()
+        widgets = {
+            "title": forms.TextInput(attrs={"class":"form-control"}),
+            "content": CKEditorWidget(),
+        }
         
 
 # Author Model Form

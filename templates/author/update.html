@@ -7,22 +7,26 @@
 
 {% block content %}
 
+
+
+
+
 <div class="container publish">
     <h1>Kullanıcı Ayarları</h1>
     <hr>
     <form>
         
         <div class="mb-3" data-bs-toggle="modal" data-bs-target="#modal1">
-            <label for="username" class="form-label">Kullanıcı Adı</label>
+            <label for="username" class="form-label">Kullanıcı Adı:  {{ user.username }}</label>
         </div>
 
 
         <div class="mb-3" data-bs-toggle="modal" data-bs-target="#modal2">
-            <label for="email" class="form-label">E-posta Adresiniz</label>
+            <label for="email" class="form-label">E-posta Adresiniz:  {{ user.email }}</label>
         </div>
 
         <div class="mb-3" data-bs-toggle="modal" data-bs-target="#modal3">
-            <label for="password" class="form-label">Şifreniz</label>
+            <label for="password" class="form-label">Şifreniz: ******************* </label>
         </div>            
     </form>
 
@@ -179,9 +183,10 @@
     </div>
 </div>
 
-<div class="container mt-3">
+
+<div class="container publish">
     <div class="col">
-        <h1>Update</h1>
+        <h1>Yazar Ayarları</h1>
         <hr>
         <form method="POST" class="form" enctype="multipart/form-data">
             {% csrf_token %}
@@ -194,13 +199,11 @@
                     {{ field }}                    
                     </div> 
             {% endfor %}
-            <button type="submit" class="btn"> Update </button>
+            <button type="submit" class="btn btn-primary"> Güncelle </button>
         </form>
 
     </div>
 </div>
-
-
 
 {% endblock content %}
 

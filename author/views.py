@@ -90,7 +90,7 @@ def panel(request):
     blogs = {""}
     blogs = Draft.objects.all().filter(author=author)
     
-    return render(request, "author/panel.html", {"blogs":blogs})
+    return render(request, "author/panel.html", {"blogs":blogs, "profile":author})
 
 # site/author/update/
 # template: author/update.html

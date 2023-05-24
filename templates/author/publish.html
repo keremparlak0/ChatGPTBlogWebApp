@@ -10,36 +10,8 @@ publish
 
 {% block content %}
 
-<div class="container">
-    <form>
-      <div class="row publish">
-        <div class="col-md-6">
-          <div class="form-group">
-            <input type="file" class="form-control-file" id="image" name="image">
-            
-            <img id="preview" class="mt-2" src="#" alt="Seçilen Resim" style="display: none; max-width: 100%; max-height: 200px;">
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="title" name="title" placeholder="Başlık Girin">
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="tags" name="tags" placeholder="Etiketleri Girin">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <textarea class="form-control" id="content2" name="content" placeholder="Metin Konusu Girin"></textarea>
-          </div>
-        </div>
-        <div class="col-12 btnY">
-            <button type="submit" class="btn btnRenk">Yayınla</button>
-          </div>              
-          
-      </div>
-    </form>
-  </div>
-
     <div class="container">
+      <div class="row publish">
         <div class="row">
             <div class="col">
                 <form method="POST" class="form" enctype="multipart/form-data">
@@ -56,10 +28,11 @@ publish
                         {{ field }}                    
                         </div> 
                     {% endfor %}
-                    <button type="submit" class="btn">Publish</button>
+                    <button type="submit" class="btn btnRenk">Yayınla</button>
                 </form>
             </div>
         </div>
+      </div>
     </div>
 {% endblock content %}
 

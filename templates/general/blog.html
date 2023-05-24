@@ -7,32 +7,64 @@
 
 {% block content %}
 
-  <!------------------ İçerik ------------------>
+  <!-- İçerik -->
 
   <div class="container">
     <div class="row">
       <div class="col-lg-8 editor pt-4">
         <!-- Blog Yazısı -->
         <div class="blog-entry">
-          <h2>Blog Başlığı</h2>
+          <h2> {{ blog.draft.title }} </h2>
           <hr>
           <div class="">
-            <img src="/img/1.png" class="w-50" alt="">
+            <img src="{{ blog.banner.url }}" class="w-50" alt="">
           </div>
           <div class="mt-5">
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum voluptatibus a repudiandae facere, obcaecati blanditiis ipsum rem, ducimus corporis perspiciatis similique animi, ullam excepturi sequi recusandae dolorem tempora placeat saepe?</p>
-            <h4>Lorem, ipsum dolor.</h4>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt iure error molestias, sit eos odio expedita voluptas ipsam! Labore, assumenda eius beatae alias culpa incidunt atque quas magni perferendis, deleniti voluptatibus at debitis deserunt vero consequuntur nostrum quidem fuga voluptatem sint dignissimos voluptate! Eos adipisci itaque quod? Facilis mollitia natus iure amet consectetur dolorum aperiam dignissimos voluptates dicta autem, repellat molestias, veritatis eos cumque labore minus architecto repellendus, debitis sapiente. Voluptates, quos nemo cupiditate illum repellat dolorum eligendi molestiae inventore reprehenderit ea, provident asperiores ducimus aliquid neque, atque tenetur repudiandae! Dicta debitis inventore ipsum soluta incidunt consequatur obcaecati quidem totam.</p>
+            {{ blog.draft.content|safe }}
           </div>
 
           <div class="blog-info">
             <p>
-               
-                <i class="fa-regular fa-comment" style="color: #000000;"></i> 2
-            
+                <i class="fa-regular fa-comment" style="color: #000000;"></i> 
+                <div>
+                  {% if comments %}
+                  {% for comment in comments %}
+                      {{ comment.user_id }} {{ comment.date }}<br> {{ comment.message }} 
+                      {% if user.is_authenticated and user == comment.user_id %}
+                          <form action="{% url 'commentAction' 0 comment.id %}" method="POST">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-sm btn-danger">Sil</button>
+                          </form>
+                      {% endif %}
+                      <br> <br> <br>
+                  {% endfor %}
+                  {% else %}
+                      <p> Henüz Bir Yorum Yok </p>
+                  {% endif %}
+                  
+                  {% if user.is_authenticated %}
+                      <form action="{% url 'commentAction' blog.id %}" blog method="POST">
+                          {% csrf_token %}
+                          {{ form.as_p }}
+                          <input type="submit" value="Yorum">
+                      </form>
+                  {% else %}
+                      <p> You need to login to comment </p>
+                  {% endif %}
+                  </div>
             </p>
             <p>
-                <i class="fa-regular fa-heart" style="color: #000000;"></i> 6 
+                <i class="fa-regular fa-heart" style="color: #000000;"></i>
+                <div>
+                  {% if user.is_authenticated %}
+                      <form action="/blog/{{ blog.id }}/like" method="post">
+                          {% csrf_token %}
+                          <button class="btn btn-primary btn-sm" type="submit" name="blog_id" value="{{ blog.id }}"> {{ blog.total_likes }} beğen </button>
+                      </form>
+                  {% else %}
+                      <p> You need to login to like </p>
+                  {% endif %}
+                </div>
             </p>
           </div>
         </div>
@@ -44,9 +76,9 @@
           <div class="author-info">
             <div class="author-profile">
               <div class="profile-info" style="display: flex;">
-                <img src="/img/profil.png" class="profile-image2" alt="Profil Resmi">
+                <img src="{{ blog.author.picture }}" class="profile-image" alt="Profil Resmi">
                 <div class="author-details">
-                  <h5><a href="#">Adı Soyadı</a></h5>
+                  <h5><a href="#">{{ blog.author.user.first_name }}  {{ blog.author.user.last_name }}</a></h5>
                   <div class="stats">
                     <p><a href="#"> 10 takipçi </a></p>
                     <span class="separator"></span>
@@ -56,7 +88,8 @@
               </div>
               <hr>
               <div class="about">
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem quo similique labore ratione, consequatur veniam enim? Facilis modi natus, sit quaerat ab eius dolor similique quos, repudiandae cumque suscipit placeat!</p>
+                <p> {{ blog.author.about }} </p>
+                <p> {{ blog.author.contact }} </p>
             </div>
             <button type="button" class="btn btnRenk">Takip Et</button>
             </div>
@@ -67,53 +100,5 @@
     </div>
 
   </div>
-
-<div class="container">
-    <div class="row">
-        <div class="col-10">
-            <h1> {{blog.title}} </h1>
-            <img src="{{blog.banner.url}}" alt="banner">
-            <div class="container">
-                {{blog.draft.content|safe}}
-            </div>
-        </div>
-    </div>
-</div>
-
-
-{% if user.is_authenticated %}
-    <form action="/blog/{{ blog.id }}/like" method="post">
-        {% csrf_token %}
-        <button class="btn btn-primary btn-sm" type="submit" name="blog_id" value="{{ blog.id }}"> {{ blog.total_likes }} beğen </button>
-    </form>
-{% else %}
-    <p> You need to login to like </p>
-{% endif %}
-
-<h2> Comments </h2>
-{% if comments %}
-{% for comment in comments %}
-    {{ comment.user_id }} {{ comment.date }}<br> {{ comment.message }} 
-    {% if user.is_authenticated and user == comment.user_id %}
-        <form action="{% url 'commentAction' 0 comment.id %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-danger">Sil</button>
-        </form>
-    {% endif %}
-    <br> <br> <br>
-{% endfor %}
-{% else %}
-    <p> Henüz Bir Yorum Yok </p>
-{% endif %}
-
-{% if user.is_authenticated %}
-    <form action="{% url 'commentAction' blog.id %}" blog method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Yorum">
-    </form>
-{% else %}
-    <p> You need to login to comment </p>
-{% endif %}
 
 {% endblock content %}
