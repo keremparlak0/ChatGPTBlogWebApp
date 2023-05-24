@@ -50,7 +50,7 @@
                             <td>{{blog.title}}</td>
                             <td>{{blog.description}}</td>
                             <td>
-                                <a href="{% url 'blogbyslug' blog.slug %}"> Link </a>
+                                <a href="{% url 'blogbyid' blog.id %}"> Link </a>
                             </td>
                         </tr>
                     {% endfor %}

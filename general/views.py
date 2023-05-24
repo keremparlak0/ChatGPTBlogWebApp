@@ -21,10 +21,10 @@ def index(request):
     else:
         return HttpResponse("Error")
 
-def search():
+def search(request):
     pass
 
-def recommendation(): 
+def recommendation(request): 
     pass
 
 
@@ -100,7 +100,11 @@ def getBLogById(request, blog_id):
     }
     return render(request, 'general/blog.html', context)
 
+def about(request):
+    return render(request,"general/about.html")
 
+def contact(request):
+    return render(request, "general/contact.html")
 
 @login_required 
 def follow(request, profile):

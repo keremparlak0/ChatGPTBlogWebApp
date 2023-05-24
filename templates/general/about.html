@@ -1,0 +1,49 @@
+
+
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block title %} Blog {% endblock title %}
+
+{% block content %}
+
+ <!------------------ İçerik ------------------>
+
+ <div class="container publish">
+    <h2 class="stil1 p-2">CHATGPT İLE BLOG OKUMA VE YAZMA DENEYİMİNİZİ GELİŞTİRİN!</h2>
+    <div class="p-2">
+        <p>Merhaba! Biz <b> AI BLOG</b> ekibi olarak, sizlere ChatGPT teknolojisi kullanarak desteklenen bir platform
+            sunuyoruz. Amacımız, kullanıcılarımıza yazma süreçlerinde yardımcı olmak ve okuyuculara daha iyi bir
+            deneyim sunmaktır. Yapay zekamızın sunduğu özelliklerle, yazı yazanların işlerini kolaylaştırmak ve
+            içeriklerini daha etkili hale getirmek için çeşitli araçlar sunuyoruz.
+        </p>
+
+        <h4 class="stil1 mt-4">Sizlere Ne Gibi Özellikler Sunuyoruz?</h4>
+        <ul class="p-3">
+        <li class=""> Yazarlar, yazılarını hazırlarken yazı örnekleri alabilirler. Yapay zekamız, metinleri analiz eder ve
+            imla hatalarını düzeltir. Bu sayede yazarlar, dilbilgisi ve imla hataları konusunda daha güvenli bir
+            şekilde yazılarını oluşturabilirler. Böylece, daha profesyonel ve akıcı içerikler üretebilirler.</li>
+        <li class="my-3"> Yayınlama aşamasında yapay zekamız devreye girer ve otomatik olarak etiketler ve konular üretir. Bu
+            sayede yazılarınızı daha fazla kişiye ulaştırabilir ve okuyucuların ilgisini çekebilirsiniz. Yapay zeka
+            algoritmamız, içeriğinizi analiz ederek en uygun etiketleri ve ilgili konuları otomatik olarak belirler.
+        </li>
+        <li class="my-3"> Okuyucularımız da ChatGPT sayesinde daha iyi bir çeviri deneyimi yaşarlar. İçeriklerinizi farklı
+            dillerde okuyabilir ve çeviri hatalarını minimuma indirebilirler. Ayrıca, yazıların özetlerini alarak
+            içeriğin ana noktalarını hızlıca anlayabilirler.</li>
+        <li class="my-3"> Web sitemiz, yazanlar ve okuyanlar arasında etkileşimi güçlendirmek ve daha iyi içeriklerin üretilmesini
+            sağlamak için tasarlanmış bir platformdur. ChatGPT'nin sunduğu özelliklerle, yazılarınızı daha etkili
+            bir şekilde oluşturabilir, daha geniş bir kitleye ulaşabilir ve okuyucularınızın daha iyi bir deneyim
+            yaşamasını sağlayabilirsiniz.</li>{% url 'register' %}
+        </ul>
+
+        <h3 class="text-center stil2">Hemen <a href="{% url 'register' %}">Kaydolun!</a></h3>
+
+
+    </div>
+
+
+</div>
+
+{% endblock content %}
+

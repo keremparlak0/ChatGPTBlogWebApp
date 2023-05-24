@@ -59,7 +59,7 @@ def register_request(request):
                 else:
                     user = User.objects.create_user(username=username,email=email,first_name=firstname,last_name=lastname,password=password)
                     user.save()
-                    return redirect("index")                    
+                    return redirect("login")                    
         else:
             return render(request, "account/register.html", {
                 "error":"parola eşleşmiyor.",
@@ -74,6 +74,9 @@ def register_request(request):
 def logout_request(request):
     logout(request)
     return redirect("index")
+
+def settings(request):
+    return render(request, "account/settings.html")
 
 # def re-captcha(request):
 

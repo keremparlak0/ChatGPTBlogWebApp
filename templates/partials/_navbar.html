@@ -4,7 +4,7 @@
 
 <nav class="navbar navbar-expand-md fixed-top">
     <div class="container-fluid">
-        <a href="#anasayfa">
+        <a href="#anasayfa">  <!-- link ekleyemedim ekleyince bozuluyor-->
             <img src="{% static 'img/logo2.png' %}" alt="Logo">
         </a>
 
@@ -18,8 +18,8 @@
 
 
             <!-- Search -->
-            <form class="form-search" role="search" id="search">
-                <input class="form-control " type="search" placeholder="Arama yap" aria-label="Search">
+            <form action="{% url 'search' %}" method="GET" class="form-search" role="search" id="search">
+                <input class="form-control" name="q" type="search" placeholder="Arama yap" aria-label="Search">
             </form>                 
 
             <ul class="navbar-nav">
@@ -47,30 +47,14 @@
                     <ul class="dropdown-menu dropdown-menu-end">
 
                         <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fa-regular fa-user fa-sm"></i>
-                                &nbsp;Profil
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{% url 'search' %}">
                                 <i class="fa-regular fa-bookmark fa-sm"></i>
                                 &nbsp;Yer İşaretleri
                             </a>
                         </li>
 
                         <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fa-regular fa-file-lines fa-sm"></i>
-                                &nbsp;Yazılarım
-                            </a>
-                        </li>
-
-                        <div class="dropdown-divider"></div>
-
-                        <li>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="{% url 'settings' %}">
                                 <i class="fa-solid fa-gear fa-sm"></i>
                                 &nbsp;Ayarlar
                             </a>
@@ -110,29 +94,36 @@
 
             <!-- Search -->
 
-            <form class="form-search" role="search" id="search">
-                <input class="form-control " type="search" placeholder="Arama yap" aria-label="Search">
+            <form action="{% url 'search' %}" class="form-search" role="search" id="search">
+                <input name="q" class="form-control " type="search" placeholder="Arama yap" aria-label="Search">
             </form>
 
             <ul class="navbar-nav">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{% url 'about' %}">
                         Hakkımızda
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{% url 'contact' %}">
                         İletişim
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <div class="ms-auto d-flex">
-                        <a href="{% url 'login' %}" type="button" class="btn btnG me-4" data-bs-target="#modal"
-                            data-bs-toggle="modal" aria-label="Giriş Yap">
+                        <a href="{% url 'login' %}" type="button" class="btn btnG me-4">
                             Giriş Yap
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <div class="ms-auto d-flex">
+                        <a href="{% url 'register' %}" type="button" class="btn btnG me-4">
+                            Kayıt ol
                         </a>
                     </div>
                 </li>

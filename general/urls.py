@@ -5,6 +5,8 @@ urlpatterns = [
     path('', views.index),
     path('index', views.index, name="index"),
     path('search',views.search, name="search"),
+    path('about',views.about, name="about"),
+    path('contact',views.contact, name="contact"),
     path('profile/<int:profile_id>', views.getProfileByID, name="profilebyid"),
     path('profile/<slug:profile_slug>', views.getProfileBySlug, name="profilebyslug"),
     path('blog/<int:blog_id>', views.getBLogById, name="blogbyid"),
