@@ -33,7 +33,7 @@ def getProfileBySlug(request, profile_slug):
     user = request.user
     
     button_name = "Takip Et" 
-    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=blog.author).exists():
+    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=profile).exists():
         button_name = "Takibi Bırak"      
 
     blogs = {""}
@@ -50,7 +50,7 @@ def getProfileByID(request, profile_id):
     profile = Author.objects.get(id=profile_id)
     user = request.user   
     button_name = "Takip Et" 
-    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=blog.author).exists():
+    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=profile).exists():
         button_name = "Takibi Bırak"     
 
     blogs = {""}
