@@ -88,7 +88,7 @@ def panel(request):
     author = is_author(request)
     if(author):
         blogs = {""}
-        blogs = Blog.objects.all().filter(author=author)
+        blogs = Draft.objects.all().filter(author=author)
         
         return render(request, "author/panel.html", {"blogs":blogs, "profile":author})
     else:
@@ -109,7 +109,9 @@ def update(request, message=""):
                 picture = request.FILES["picture"],
                 )
             author.save() 
-            return HttpResponse("yazar başarıyla oluşturuldu")
+            return redirect("panel")
+        else:
+            return HttpResponse("form geçerli değil")
     else:
         form = UpdateForm()
         context = {

@@ -81,12 +81,10 @@
                     <div class="row">
                         
                         <div class="col-4 mt-3 text-center">
-                            <img src="{{ blog.banner.url }}" alt="banner" class="img-fluid" style="height: 150px; width: 150px;">
                         </div>
                         <div class="col-8">
                             <div class="card-body">
-                                <h5 class="card-text bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.draft_id.title}}</a></h5>
-                                <p class="card-text">{{blog.draft_id.content}}</p>
+                                <h5 class="card-text bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></h5>
                                 <a href="{% url 'editor' blog.draft_id %}" class="btn btn-primary">Düzenle</a>
                                 <a href="{% url 'delDraft' blog.draft_id %}" class="btn btn-danger">Sil</a>
                                 <button type="button" class="btn bookmark"><i class="fa-regular fa-bookmark fa-lg" style="color: #000000"></i></button>                      
