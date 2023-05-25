@@ -32,45 +32,37 @@ def getProfileBySlug(request, profile_slug):
     profile = Author.objects.get(slug=profile_slug)
     user = request.user
     
-    if request.method == 'POST':
-        if request.user.is_authenticated:
-            follow(request,profile)
-        else:
-            return redirect("login")
-            
-    #is_follow = Follow.objects.check(user_id=request.user, author_id=profile)    
     if Follow.objects.filter(user_id=user, author_id=profile).exists():
-        button_name = "Unfollow"
+        button_name = "Takibi Bırak"
     else:
-        button_name = "follow"          
+        button_name = "Takip Et"        
+
+    blogs = {""}
+    blogs = Blog.objects.all().filter(author=profile)
 
     context = {
         'profile': profile,
         'button_name':button_name,
+        'blogs':blogs,
     }
     return render(request, 'general/profile.html', context)
 
 def getProfileByID(request, profile_id):
     profile = Author.objects.get(id=profile_id)
-    user = request.user
-
-    print(profile)
-    print(user)
-
-    if request.method == 'POST':
-        if request.user.is_authenticated:
-            follow(request,profile)
-        else:
-            return redirect("login")
+    user = request.user   
 
     if Follow.objects.filter(user_id=user, author_id=profile).exists():
-        button_name = "Unfollow"
+        button_name = "Takibi Bırak"
     else:
-        button_name = "follow"        
+        button_name = "Takip Et"        
+
+    blogs = {""}
+    blogs = Blog.objects.all().filter(author=profile)
 
     context = {
         'profile': profile,
         'button_name':button_name,
+        'blogs':blogs,
     }
     return render(request, 'general/profile.html', context)
 
@@ -78,12 +70,18 @@ def getBlogBySlug(request, blog_slug):
     blog = Blog.objects.get(slug=blog_slug)
     blog.interaction += 1
     blog.save()
+
+    button_name = "Takip Et" 
+    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=blog.author).exists():
+        button_name = "Takibi Bırak"     
+
     form = CommentForm()
     comments = Comments.objects.filter(blog_id=blog)
     context = {
         'blog': blog,
         'form': form,
-        'comments':comments
+        'comments':comments,
+        'button_name':button_name,
     }
     return render(request, 'general/blog.html', context)
 
@@ -91,12 +89,18 @@ def getBLogById(request, blog_id):
     blog = Blog.objects.get(id=blog_id)
     blog.interaction += 1
     blog.save()
+
+    button_name = "Takip Et" 
+    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=blog.author).exists():
+        button_name = "Takibi Bırak"
+
     form = CommentForm()
     comments = Comments.objects.filter(blog_id=blog)
     context = {
         'blog': blog,
         'form':form,
         'comments':comments,
+        'button_name':button_name,
     }
     return render(request, 'general/blog.html', context)
 
@@ -107,22 +111,27 @@ def contact(request):
     return render(request, "general/contact.html")
 
 @login_required 
-def follow(request, profile):
-    try:
-        #if follow exist
-        follow = Follow.objects.get(user_id=request.user, author_id=profile)
-        follow.delete()
-        print("follow deleted")
-    except:
-        #if follow does not exist
-        newfollow = Follow(
-        user_id = request.user,
-        author_id = profile,
-        )
-        newfollow.save()
-        print("follow created")
-    return
+def followAction(request, profile_id):
+    profile = Author.objects.get(id=profile_id)
 
+    if request.user.is_authenticated:
+        try:
+            #if follow exist
+            follow = Follow.objects.get(user_id=request.user, author_id=profile)
+            follow.delete()
+            print("follow deleted")
+        except:
+            #if follow does not exist
+            newfollow = Follow(
+            user_id = request.user,
+            author_id = profile,
+            )
+            newfollow.save()
+            print("follow created")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        return redirect("login")
+   
     
 @login_required
 def like(request, blog_id):

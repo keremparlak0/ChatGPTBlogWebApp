@@ -49,7 +49,7 @@
                           <input type="submit" value="Yorum">
                       </form>
                   {% else %}
-                      <p> You need to login to comment </p>
+                      <p> Yorum yapmak için giriş yapmalısınız </p>
                   {% endif %}
                   </div>
             </p>
@@ -62,7 +62,7 @@
                           <button class="btn btn-primary btn-sm" type="submit" name="blog_id" value="{{ blog.id }}"> {{ blog.total_likes }} beğen </button>
                       </form>
                   {% else %}
-                      <p> You need to login to like </p>
+                      <p> Yazıyı beğenmek için giriş yapmalısınız </p>
                   {% endif %}
                 </div>
             </p>
@@ -76,9 +76,9 @@
           <div class="author-info">
             <div class="author-profile">
               <div class="profile-info" style="display: flex;">
-                <img src="{{ blog.author.picture }}" class="profile-image" alt="Profil Resmi">
+                <img src="{{ blog.author.picture.url }}" class="profile-image" alt="Profil Resmi">
                 <div class="author-details">
-                  <h5><a href="#">{{ blog.author.user.first_name }}  {{ blog.author.user.last_name }}</a></h5>
+                  <h5><a href="{% url 'profilebyid' blog.author.id %}">{{ blog.author.user.first_name }}  {{ blog.author.user.last_name }}</a></h5>
                   <div class="stats">
                     <p><a href="#"> 10 takipçi </a></p>
                     <span class="separator"></span>
@@ -91,7 +91,11 @@
                 <p> {{ blog.author.about }} </p>
                 <p> {{ blog.author.contact }} </p>
             </div>
-            <button type="button" class="btn btnRenk">Takip Et</button>
+            <form action="{% url 'followAction' blog.author.id %}">
+              {% csrf_token %}
+              <button type=submit class="btn btn-primary"> {{button_name}} </button>
+            </form>
+            
             </div>
           </div>
         </div>

@@ -88,7 +88,7 @@ def panel(request):
     author = Author.objects.get(user = request.user)
     
     blogs = {""}
-    blogs = Draft.objects.all().filter(author=author)
+    blogs = Blog.objects.all().filter(author=author)
     
     return render(request, "author/panel.html", {"blogs":blogs, "profile":author})
 

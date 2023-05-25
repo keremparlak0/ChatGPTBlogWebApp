@@ -9,6 +9,7 @@ urlpatterns = [
     path('contact',views.contact, name="contact"),
     path('profile/<int:profile_id>', views.getProfileByID, name="profilebyid"),
     path('profile/<slug:profile_slug>', views.getProfileBySlug, name="profilebyslug"),
+    path('profile/<int:profile_id>/follow', views.followAction, name="followAction"),
     path('blog/<int:blog_id>', views.getBLogById, name="blogbyid"),
     path('blog/<int:blog_id>/like', views.like, name='likebyid'),
     path('blog/<slug:blog_slug>',views.getBlogBySlug, name="blogbyslug"),
