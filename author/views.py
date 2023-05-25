@@ -85,17 +85,19 @@ def publish(request, draft_id):
 # template: author/panel.html
 @login_required()
 def panel(request):
-    author = Author.objects.get(user = request.user)
-    
-    blogs = {""}
-    blogs = Blog.objects.all().filter(author=author)
-    
-    return render(request, "author/panel.html", {"blogs":blogs, "profile":author})
+    author = is_author(request)
+    if(author):
+        blogs = {""}
+        blogs = Blog.objects.all().filter(author=author)
+        
+        return render(request, "author/panel.html", {"blogs":blogs, "profile":author})
+    else:
+        return redirect("update")
 
 # site/author/update/
 # template: author/update.html
 @login_required()
-def update(request):
+def update(request, message=""):
     if request.method == 'POST':
         form = UpdateForm(request.POST, request.FILES)
         if form.is_valid():
@@ -111,7 +113,8 @@ def update(request):
     else:
         form = UpdateForm()
         context = {
-            'form':form
+            'message':message,
+            'form':form,
         }
         return render(request, 'author/update.html', context)
 
@@ -126,3 +129,11 @@ def update(request):
 #             image.save()
 #     else:
 #         return render(request, "author/library.html", {"form":form})
+
+def is_author(request):
+    user = request.user
+    try:
+        author = Author.objects.get(user_id=user)
+        return author
+    except:
+        return False
