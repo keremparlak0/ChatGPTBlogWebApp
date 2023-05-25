@@ -1,6 +1,9 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 def login_request(request):
     if request.user.is_authenticated:
@@ -78,14 +81,46 @@ def logout_request(request):
 def settings(request):
     return render(request, "account/settings.html")
 
-# def re-captcha(request):
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-# def password-recovery(request):
+# def change_password(request):
+#     user = request.user
+#     if request.method == "POST":
+#         newpassword = request.POST["password"]
+#         newrepassword = request.POST["repassword"]
+        
 
-# def email-validation(request):
+#         update_session_auth_hash(request, user)  # Important!
+       
+#         user.password = newpassword
+#         user.password = newrepassword
+#         user.save()
+        
 
-# def change-password(request):
+def change_username(request):
+    user = request.user
+    if request.method == "POST":
+        newusername = request.POST["username"]
+        user.username = newusername
+        user.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-# def change-username(request):
+def change_email(request):
+    user = request.user
+    if request.method == "POST":
+        newemail = request.POST["email"]
+        user.username = newemail
+        user.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-# def change-email(request):
+def remove_user(request):
+    user = request.user
+    logout(request)
+    user.delete()
+    return redirect("index")
