@@ -79,3 +79,7 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'text' : forms.Textarea(attrs={"class":"form-control"})
         }
+        labels = {
+            "message": "mesaj: ",
+
+        }
