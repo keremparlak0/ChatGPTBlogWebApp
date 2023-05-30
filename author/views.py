@@ -67,11 +67,11 @@ def publish(request, draft_id):
                 blog = Blog(
                     author = author,
                     draft = record,
-                    tags = form.cleaned_data["tags"],
                     banner = request.FILES["banner"],
                     description = form.cleaned_data["description"],
                 )
                 blog.save()
+                blog.tags.add(*form.cleaned_data["tags"])
                 return redirect("panel")
         else:
             form = PublishForm()

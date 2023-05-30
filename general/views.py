@@ -4,6 +4,27 @@ from author.forms import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from author.models import *
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
+from author.forms import *
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from author.models import *
+from django.contrib.postgres.search import TrigramSimilarity, TrigramDistance
+from django.contrib.postgres.search import SearchQuery, SearchRank
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+
+from django.db.models import FloatField
+from django.db.models.functions import Cast
+from django.db.models import F, Value
+from django.db.models import Q
+from django.db import connection
+from django.db import models
+from .zemberekkk import MyService
+from taggit.models import Tag, TaggedItem
+from django.db import connections
+from django.db.models import Max
+
 
 
 def index(request):

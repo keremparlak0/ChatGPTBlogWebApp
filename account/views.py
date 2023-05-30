@@ -62,7 +62,8 @@ def register_request(request):
                 else:
                     user = User.objects.create_user(username=username,email=email,first_name=firstname,last_name=lastname,password=password)
                     user.save()
-                    return redirect("login")                    
+                    user = authenticate(username=username, password=password)
+                    login(request, user)                
         else:
             return render(request, "account/register.html", {
                 "error":"parola eşleşmiyor.",
