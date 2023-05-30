@@ -75,7 +75,8 @@ class Blog(models.Model):
     search_post = SearchVectorField(null=True)
     tags_full = models.CharField(max_length=2550, blank=True, null=True)
     
-
+    def total_likes(self):
+        return self.likes.count()
 
     @classmethod
     def get_most_liked_posts(cls, limit=10):
