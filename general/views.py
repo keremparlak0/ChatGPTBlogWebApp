@@ -169,7 +169,7 @@ def index(request):
             author_ids = takip_edilenler.values_list('author_id', flat=True)
             takip_edilen_yazilar = Blog.objects.filter(author__in=author_ids)
 
-            followings = author.followings.all()
+            followings = author.following.all()
             followers = kullanici.followers.all()
 
             # En çok beğenilen gönderiler
