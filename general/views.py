@@ -164,13 +164,18 @@ def index(request):
             kullanici = request.user
             author = Author.objects.get(user=kullanici)
             takip_edilenler = Follow.objects.filter(user_id=kullanici)
-            takip_edilen_kisiler = Author.objects.filter(id__in=takip_edilenler)
+            takip_edilen_kisiler = Author.objects.filter(id__in=[r.author_id.id for r in takip_edilenler])
             takip_edilenler = Follow.objects.filter(user_id=kullanici)
             author_ids = takip_edilenler.values_list('author_id', flat=True)
             takip_edilen_yazilar = Blog.objects.filter(author__in=author_ids)
 
             followings = author.following.all()
-            followers = kullanici.followers.all()
+            posts_for_followings = Blog.objects.filter(author__in=[r.author_id.id for r in followings]).order_by('-interaction', '-date')
+            followings = Author.objects.filter(id__in=[r.author_id.id for r in followings]) # author objeleri
+
+            followers = kullanici.followers.all() # user objeleri
+
+            
 
             # En çok beğenilen gönderiler
             most_liked_posts = Blog.get_most_liked_posts(limit=10)  # En çok beğenilen ve en yeni 5 yazıyı alın
