@@ -13,13 +13,11 @@
                           <div class="card-body">
                             <h5 class="card-title"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></h5>
                             <img src="{{ blog.banner.url }}" alt="banner" class="img-fluid">
-                            <h6 class="card-subtitle mb-2 text-muted"><a href="#"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></h6>
+                            <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></h6>
                             <p class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></p>
                             <button type="button" class="btn bookmark"><i class="fa-regular fa-bookmark fa-lg"></i></button>
                             <div class="tags">
-                              <a href="#" class="tag">#Etiket1</a>
-                              <a href="#" class="tag">#Etiket2</a>
-                              <a href="#" class="tag">#Etiket3</a>
+                             tags: {% for tag in blog.tags.all %} <a href="{% url 'search_tag' tag.name %}" > {{ tag.name }} </a> {% if not forloop.last %}, {% endif %}{% endfor %}
                             </div>
                           </div>
                         </div>

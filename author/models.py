@@ -36,6 +36,13 @@ class Author(models.Model):
     @property
     def author_id(self):
         return self.id
+    
+    @property
+    def follower_count(self):
+        return self.following.count()
+    
+    def blog_count(self):
+        return self.blogs.count()
 
 class Draft(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
@@ -55,7 +62,7 @@ class Blog(models.Model):
     description = models.TextField(max_length=250)
     tags = models.CharField(max_length=500)
     date = models.DateField(auto_now=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='blogs')
     stemmed_author_user = models.TextField(default="", blank=True, null=True)
     stemmed_author_name_surname = models.TextField(default="", blank=True, null=True)
     likes = models.ManyToManyField(User, related_name='blog_posts')
@@ -181,8 +188,8 @@ class Blog(models.Model):
         return self.id
 
 class Follow(models.Model):
-    author_id = models.ForeignKey(Author, on_delete=models.CASCADE)  #following
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)      #followers
+    author_id = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='following')
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
 
     @property
     def follow_id(self):
@@ -199,4 +206,9 @@ class Comments(models.Model):
     def comment_id(self):
         return self.id
 
+# önerilenler için
+class UserLikedPost(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_posts')
+    post = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='liked_by')
+    tags = models.ManyToManyField(Tag)
 

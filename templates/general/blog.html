@@ -80,9 +80,9 @@
                 <div class="author-details">
                   <h5><a href="{% url 'profilebyid' blog.author.id %}">{{ blog.author.user.first_name }}  {{ blog.author.user.last_name }}</a></h5>
                   <div class="stats">
-                    <p><a href="#"> 10 takipçi </a></p>
+                    <p><a href="#"> {{ blog.author.follower_count }} Takipçi </a></p>
                     <span class="separator"></span>
-                    <p><a href="#"> 50 yazı </a></p>
+                    <p><a href="#"> {{ blog.author.blog_count }} Yazı </a></p>
                   </div>
                 </div>          
               </div>

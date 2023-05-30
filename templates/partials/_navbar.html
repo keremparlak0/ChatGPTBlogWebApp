@@ -18,9 +18,9 @@
 
 
             <!-- Search -->
-            <form action="{% url 'search' %}" method="GET" class="form-search" role="search" id="search">
-                <input class="form-control" name="q" type="search" placeholder="Arama yap" aria-label="Search">
-            </form>                 
+            <form class="form-search" role="search" action="{% url 'index' %}">
+                <input class="form-control " id="query" name="query" type="search" placeholder="Arama yap" aria-label="Search">
+            </form>                    
 
             <ul class="navbar-nav">
                 

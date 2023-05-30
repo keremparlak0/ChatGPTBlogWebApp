@@ -13,8 +13,10 @@ urlpatterns = [
     path('blog/<int:blog_id>', views.getBLogById, name="blogbyid"),
     path('blog/<int:blog_id>/like', views.like, name='likebyid'),
     path('blog/<slug:blog_slug>',views.getBlogBySlug, name="blogbyslug"),
-     path('blog/<int:blog_slug>/like', views.like, name='likebyslug'),
+    path('blog/<int:blog_slug>/like', views.like, name='likebyslug'),
 
     path('blog/<int:blog_id>/comment/<int:comment_id>', views.commentAction, name='commentAction'),
     path('blog/<int:blog_id>/comment/', views.commentAction, name='commentAction'),
+
+    path('tags/<str:tag>', views.search_tag, name='search_tag'),
 ]

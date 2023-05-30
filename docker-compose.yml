@@ -17,23 +17,13 @@ services:
   db:
 
     image: postgres
-    container_name: postgres_container1
+    container_name: postgres_container2
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Vural
       - POSTGRES_DB=grup_14
     ports:
       - "5432:5432"
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_container1
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=pgadmin@example.com
-      - PGADMIN_DEFAULT_PASSWORD=password
-    ports:
-      - "5050:80"
-    restart: always
 
   zemberek:
     image: ryts/zemberek-grpc
