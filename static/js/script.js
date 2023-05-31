@@ -59,3 +59,25 @@ btn.classList.remove("follow-button");
 btn.classList.add("following");
 }
 }
+
+// Yorumlar
+
+document.getElementById('comment-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var comment = document.getElementById('comment').value;
+  var commentItem = document.createElement('div');
+  commentItem.classList.add('col-12', 'mb-3', 'comment');
+  commentItem.innerHTML = `
+    <div class="card">
+      <div class="card-body d-flex align-items-center">
+        <img src="/img/1.png" alt="Profil Fotoğrafı" class="profile-picture">
+        <div>
+          <h5 class="card-title">Ad Soyad</h5>
+          <p class="card-text" style="word-wrap: break-word;">${comment}</p>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('comment-list').appendChild(commentItem);
+  document.getElementById('comment').value = '';
+});

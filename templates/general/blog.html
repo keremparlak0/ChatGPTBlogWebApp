@@ -9,9 +9,9 @@
 
   <!-- İçerik -->
 
-  <div class="container">
+  <div class="container publish">
     <div class="row">
-      <div class="col-lg-8 editor pt-4">
+      <div class="col-lg-8 pt-4">
         <!-- Blog Yazısı -->
         <div class="blog-entry">
           <h2> {{ blog.draft.title }} </h2>
@@ -76,7 +76,7 @@
           <div class="author-info">
             <div class="author-profile">
               <div class="profile-info" style="display: flex;">
-                <img src="{{ blog.author.picture.url }}" class="profile-image" alt="Profil Resmi">
+                <img src="{{ blog.author.picture.url }}" class="profile-image2" alt="Profil Resmi">
                 <div class="author-details">
                   <h5><a href="{% url 'profilebyid' blog.author.id %}">{{ blog.author.user.first_name }}  {{ blog.author.user.last_name }}</a></h5>
                   <div class="stats">
@@ -104,5 +104,24 @@
     </div>
 
   </div>
+
+    <!-- Yorumlar -->
+
+    <div class=" publish mt-5">
+      <h1>Yorumlar</h1>
+    
+      <!-- Yorum Formu -->
+      <form id="comment-form">
+        <div class="mb-3">
+          <textarea class="form-control" id="comment" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Yorum Yap</button>
+      </form>
+    
+      <hr>
+    
+      <!-- Yorumların Listesi -->
+      <div id="comment-list" class="row"></div>
+    </div>
 
 {% endblock content %}
