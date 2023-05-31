@@ -500,3 +500,31 @@ margin-top: 1rem;
   justify-content: left;
 }
 
+/* anasayfa */
+
+.follow-author {
+
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+  margin-top: 15px;
+}
+
+/* yorum */
+
+.comment {
+  word-wrap: break-word;
+}
+
+.comment .profile-picture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.card-text {
+  white-space: normal;
+  word-break: break-word;
+}
