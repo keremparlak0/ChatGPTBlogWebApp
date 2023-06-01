@@ -25,6 +25,8 @@ from taggit.models import Tag, TaggedItem
 from django.db import connections
 from django.db.models import Max
 
+
+
 def search_tag(request, tag):
     blogs = Blog.objects.filter(tags__name__in=[tag])
     return render(request, 'general/index.html', {"blogs":blogs})
@@ -115,13 +117,13 @@ def author_search(text):
     tokens = text.split()
 
     query = """
-    SELECT d.id, ab.author_id, ab.stemmed_author_name_surname,
-    ts_rank(search_post, websearch_to_tsquery('simple', %s)) +
-    ts_rank(search_post, websearch_to_tsquery('simple', %s)) AS rank
+    SELECT d.id, ab.author_id, ab.stemmed_author_name_surname,ab.stemmed_author_user,
+    ts_rank(search_author, websearch_to_tsquery('simple', %s)) +
+    ts_rank(search_author, websearch_to_tsquery('simple', %s)) AS rank
     FROM author_blog AS ab
     INNER JOIN author_draft AS d ON ab.draft_id = d.id
-    WHERE search_post @@ websearch_to_tsquery('simple', %s)
-    OR search_post @@ websearch_to_tsquery('simple', %s)
+    WHERE search_author @@ websearch_to_tsquery('simple', %s)
+    OR search_author @@ websearch_to_tsquery('simple', %s)
     """
     tokens = " ".join(item for item in tokens)
     params = [tokens, tokens, tokens, tokens]
@@ -140,53 +142,46 @@ def index(request):
         posts = metni_ara(query1)
         posts = posts.order_by('-interaction', '-date')
         
-        if posts.count() == 0:
-        # yazar araması ve yazara ait yazılar
-            author_object = author_search(query1)
-            author = Author.objects.filter(id__in=[r[1] for r in author_object])
-            author_posts = Blog.objects.filter(author__in=author)
-            
-            return render(request, 'general/index.html', {'blogs': author_posts})
-            
-        
+        try:
+            author_results = author_search(query1)
+            author_results = author_results.order_by('-rank')
+        except:
+            author_results = None
+
         return render(request, 'general/index.html', {'blogs': posts})
         
     if request.method == "GET":
         blogs = Blog.objects.all()
-        # blog = recommendation   ~Vural
 
         # En çok okunan gönderiler
         most_read_posts = Blog.objects.all().order_by('-interaction', '-date')[:10]
+        # taglara göre öneri
+        posts_with_most_common_tags = get_posts_with_most_common_tags(num_tags=10)
+        # En çok beğenilen 10 gönderi
+        most_liked_posts = Blog.objects.annotate(like_count=Count('likes')).order_by('-like_count')[:10]
 
-        
+        top_tags = Tag.objects.annotate(num_likes=Count('userlikedpost')).order_by('-num_likes')
+        print(top_tags)
         # Takipçilerin gönderileri
         if request.user.is_authenticated:
-            kullanici = request.user
-            author = Author.objects.get(user=kullanici)
-            takip_edilenler = Follow.objects.filter(user_id=kullanici)
-            takip_edilen_kisiler = Author.objects.filter(id__in=[r.author_id.id for r in takip_edilenler])
-            takip_edilenler = Follow.objects.filter(user_id=kullanici)
-            author_ids = takip_edilenler.values_list('author_id', flat=True)
-            takip_edilen_yazilar = Blog.objects.filter(author__in=author_ids)
-
-            followings = author.following.all()
-            posts_for_followings = Blog.objects.filter(author__in=[r.author_id.id for r in followings]).order_by('-interaction', '-date')
-            followings = Author.objects.filter(id__in=[r.author_id.id for r in followings]) # author objeleri
-
-            followers = kullanici.followers.all() # user objeleri
-
-            
-
-            # En çok beğenilen gönderiler
-            most_liked_posts = Blog.get_most_liked_posts(limit=10)  # En çok beğenilen ve en yeni 5 yazıyı alın
-
-            # Önerilen gönderiler
             recommended_posts = get_recommendations(user=request.user, limit=10)
-            
-            # taglara göre öneri
-            posts_with_most_common_tags = get_posts_with_most_common_tags(num_tags=10)
+            print("burada1")
+            kullanici = request.user
+            followings = kullanici.following.all() # takip edilenler 
+            for i in followings:
+                print(i.following.user.username)
+            posts_for_followings = Blog.objects.filter(author__in=[r.following for r in followings]).order_by('-interaction', '-date') # takip edilenlerin gönderileri
+            try:
+                author = Author.objects.get(user=request.user)
+                followers = author.followers.all() # takipçiler         
+                return render(request, 'general/index.html', {"blogs":blogs, "most_read_posts":most_read_posts, "most_liked_posts":most_liked_posts, "posts_with_most_common_tags":posts_with_most_common_tags, "recommended_posts":recommended_posts, "posts_for_followings":posts_for_followings, "followings":followings, "followers":followers})
+            except:
+                author = None
+            return render(request, 'general/index.html', {"blogs":blogs, "most_read_posts":most_read_posts, "most_liked_posts":most_liked_posts, "posts_with_most_common_tags":posts_with_most_common_tags, "recommended_posts":recommended_posts, "posts_for_followings":posts_for_followings, "followings":followings})
+       
         
-        return render(request, 'general/index.html', {"blogs":blogs})
+        
+        return render(request, 'general/index.html', {"blogs":blogs, "most_read_posts":most_read_posts, "most_liked_posts":most_liked_posts, "posts_with_most_common_tags":posts_with_most_common_tags})
     
     # arama işlemi 
     elif request.method == "POST":
@@ -203,11 +198,12 @@ def recommendation(request):
 
 
 def getProfileBySlug(request, profile_slug):
+    
     profile = Author.objects.get(slug=profile_slug)
     user = request.user
-    
+    print("slug: " + profile.slug)
     button_name = "Takip Et" 
-    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=profile).exists():
+    if request.user.is_authenticated and Follow.objects.filter(follower=request.user, following=profile).exists():
         button_name = "Takibi Bırak"      
 
     blogs = {""}
@@ -217,14 +213,16 @@ def getProfileBySlug(request, profile_slug):
         'profile': profile,
         'button_name':button_name,
         'blogs':blogs,
+        
     }
     return render(request, 'general/profile.html', context)
 
 def getProfileByID(request, profile_id):
+    blog = Blog.objects.get(id=1)
     profile = Author.objects.get(id=profile_id)
     user = request.user   
     button_name = "Takip Et" 
-    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=profile).exists():
+    if request.user.is_authenticated and Follow.objects.filter(follower=request.user, following=profile).exists():
         button_name = "Takibi Bırak"     
 
     blogs = {""}
@@ -234,6 +232,7 @@ def getProfileByID(request, profile_id):
         'profile': profile,
         'button_name':button_name,
         'blogs':blogs,
+        'blog':blog,
     }
     return render(request, 'general/profile.html', context)
 
@@ -243,7 +242,7 @@ def getBlogBySlug(request, blog_slug):
     blog.save()
 
     button_name = "Takip Et" 
-    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=blog.author).exists():
+    if request.user.is_authenticated and Follow.objects.filter(follower=request.user, following=blog.author).exists():
         button_name = "Takibi Bırak"     
 
     form = CommentForm()
@@ -262,7 +261,7 @@ def getBLogById(request, blog_id):
     blog.save()
 
     button_name = "Takip Et" 
-    if request.user.is_authenticated and Follow.objects.filter(user_id=request.user, author_id=blog.author).exists():
+    if request.user.is_authenticated and Follow.objects.filter(follower=request.user, following=blog.author).exists():
         button_name = "Takibi Bırak"
 
     form = CommentForm()
@@ -288,14 +287,14 @@ def followAction(request, profile_id):
     if request.user.is_authenticated:
         try:
             #if follow exist
-            follow = Follow.objects.get(user_id=request.user, author_id=profile)
+            follow = Follow.objects.get(follower=request.user, following=profile)
             follow.delete()
             print("follow deleted")
         except:
             #if follow does not exist
             newfollow = Follow(
-            user_id = request.user,
-            author_id = profile,
+            follower = request.user,
+            following = profile,
             )
             newfollow.save()
             print("follow created")
@@ -306,6 +305,12 @@ def followAction(request, profile_id):
     
 @login_required
 def like(request, blog_id):
+    user = request.user
+    post = Blog.objects.get(id=blog_id)
+    user_liked_post = UserLikedPost(user=user, post=post)
+    user_liked_post.save()
+    user_liked_post.tags.add(*post.tags.all())
+
     blog = Blog.objects.get(pk=request.POST.get('blog_id'))
     liked = False
     if blog.likes.filter(id=request.user.id).exists():

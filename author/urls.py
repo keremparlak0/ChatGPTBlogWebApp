@@ -11,4 +11,5 @@ urlpatterns = [
     path('editor/delete/<int:draft_id>', views.delDraft, name="delDraft"),  # delete draft
     path('editor/new/', views.newDraft, name="newDraft"),                   # create draft
     path('publish/<int:draft_id>', views.publish, name="publishDraft"),     # publish draft
+    path('yazmayabasla/', views.yazmayabasla, name="yazmayabasla"),         # create draft's content
 ]

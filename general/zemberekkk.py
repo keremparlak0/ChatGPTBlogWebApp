@@ -14,7 +14,7 @@ from django.utils.text import slugify
 
 class MyService:
     def __init__(self):
-        self.channel = grpc.insecure_channel('zemberek_container1:6789')
+        self.channel = grpc.insecure_channel('52.6.255.180:6789')
         self.langid_stub = z_langid_g.LanguageIdServiceStub(self.channel)
         self.normalization_stub = z_normalization_g.NormalizationServiceStub(self.channel)
         self.preprocess_stub = z_preprocess_g.PreprocessingServiceStub(self.channel)

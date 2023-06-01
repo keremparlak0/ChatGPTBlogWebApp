@@ -39,7 +39,7 @@ class Author(models.Model):
     
     @property
     def follower_count(self):
-        return self.following.count()
+        return self.followers.count()
     
     def blog_count(self):
         return self.blogs.count()
@@ -58,7 +58,7 @@ class Draft(models.Model):
 class Blog(models.Model):
     draft = models.ForeignKey(Draft, on_delete=models.CASCADE)
     banner = models.ImageField(upload_to="banners/")
-    slug = models.SlugField(default="", blank=True, null=False, unique=True, db_index=True)
+    slug = models.SlugField(default="", blank=True, null=False, unique=True, db_index=True, max_length=250)
     description = models.TextField(max_length=250)
     tags = models.CharField(max_length=500)
     date = models.DateField(auto_now=True)
@@ -74,6 +74,7 @@ class Blog(models.Model):
     stemmed_tags = models.TextField(default="", blank=True, null=True)
     search_post = SearchVectorField(null=True)
     tags_full = models.CharField(max_length=2550, blank=True, null=True)
+    search_author = SearchVectorField(null=True)
     
     def total_likes(self):
         return self.likes.count()
@@ -161,12 +162,15 @@ class Blog(models.Model):
         self.search_post = (
             SearchVector('stemmed_title', weight='A', config='simple') +
             SearchVector('stemmed_content', weight='A', config='simple') +
-            SearchVector('stemmed_tags', weight='A', config='simple') +
+            SearchVector('stemmed_tags', weight='A', config='simple')
+        )
+        self.search_author = (
             SearchVector('stemmed_author_user', weight='A', config='simple') +
             SearchVector('stemmed_author_name_surname', weight='A', config='simple')
         )
 
-        Blog.objects.filter(id=self.id).update(search_post=self.search_post)
+
+        Blog.objects.filter(id=self.id).update(search_post=self.search_post, search_author=self.search_author)
 
     def update_tags_full(self):
         tagged_items = TaggedItem.objects.filter(object_id=self.id)
@@ -181,7 +185,7 @@ class Blog(models.Model):
 
     class Meta:
         indexes = [
-            GinIndex(fields=['search_post']),
+            GinIndex(fields=['search_post', 'search_author']),
         ]
 
     @property
@@ -189,8 +193,10 @@ class Blog(models.Model):
         return self.id
 
 class Follow(models.Model):
-    author_id = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='following')
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    '''author_id = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='following')
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')'''
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following', null=True)
+    following = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='followers', null=True)
 
     @property
     def follow_id(self):

@@ -17,17 +17,17 @@
 
         <div class="carousel-inner rounded-3">
             <div class="carousel-item active">
-                <img src="/img/header3.jpg" class="d-block w-100" alt="">
+                <img src="{% static 'img/header3.jpg' %}"class="d-block w-100" alt="" >
 
                 <div class="carousel-caption">
                     <div class="profile-image-container">
-                        <img src="{{profile.picture.url}}" alt="picture" width="200px">
+                        <img src="{{ profile.picture.url }}" alt="picture" class="profile-image">
                     </div>
                     <div class="profile-name">
                         <h2 class="text-center"> {{profile.user.first_name}} {{profile.user.last_name}}
-                            <form action="followAction profile.id">
-                                {% csrf_token %}
-                                <button type=submit class="btn btn-primary"> {{button_name}} </button>
+                            <form action="{% url 'followAction' profile.id %}">
+                              {% csrf_token %}
+                              <button type=submit class="btn btn-primary"> {{button_name}} </button>
                             </form>
                               <i class="fa-solid fa-xs fa-user-plus"></i>
                             </button>
@@ -35,11 +35,11 @@
 
                         <div class="d-flex justify-content-center">
                           <div class="me-3 p-0">
-                            <h6>10 <a href="#">Takipçi</a></h6> 
+                            <h6>{{ profile.follower_count }} <a href="#">Takipçi</a></h6> 
                             
                           </div>
                           <div>
-                            <h6>22 <a href="#">Yazı</a></h6> 
+                            <h6>{{ profile.blog_count }} <a href="#">Yazı</a></h6> 
                           
                           </div>
                         </div>
@@ -83,6 +83,7 @@
                           <a href="#" class="tag">#Etiket1</a>
                           <a href="#" class="tag">#Etiket2</a>
                           <a href="#" class="tag">#Etiket3</a>
+                          
                         </div>
                       </div>
                     </div>

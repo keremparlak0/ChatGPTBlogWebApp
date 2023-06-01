@@ -139,3 +139,14 @@ def is_author(request):
         return author
     except:
         return False
+
+
+def yazmayabasla(request):
+    try:
+        author = Author.objects.get(user = request.user)
+        draft = Draft(content = "", title="", author = author)
+        draft.save()
+
+        return redirect("editor", draft_id=draft.id)
+    except:
+        return redirect("update")

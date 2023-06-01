@@ -25,6 +25,16 @@ services:
     ports:
       - "5432:5432"
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container1
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+    ports:
+      - "5050:80"
+
+
   zemberek:
     image: ryts/zemberek-grpc
     container_name: zemberek_container1

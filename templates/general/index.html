@@ -4,29 +4,136 @@
 {% block title  %} Ana Sayfa {% endblock title  %}
 
 {% block content %}
-
-<h1>Ana Sayfa</h1>
-<div class="container">
-                    {% for blog in blogs %}
-                    <div class="col-md-4">
-                        <div class="card mb-3">
-                          <div class="card-body">
-                            <h5 class="card-title"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></h5>
-                            <img src="{{ blog.banner.url }}" alt="banner" class="img-fluid">
-                            <h6 class="card-subtitle mb-2 text-muted"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></h6>
-                            <p class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></p>
-                            <button type="button" class="btn bookmark"><i class="fa-regular fa-bookmark fa-lg"></i></button>
-                            <div class="tags">
-                             tags: {% for tag in blog.tags.all %} <a href="{% url 'search_tag' tag.name %}" > {{ tag.name }} </a> {% if not forloop.last %}, {% endif %}{% endfor %}
-                            </div>
+<div class="container editor">
+  <!--Geçiş-->
+<ul class="nav nav-tabs ">
+  <li class="nav-item">
+      <a href="#suggestions" data-bs-toggle="tab" class="nav-link active">Öneriler</a>
+  </li>
+  {% if user.is_authenticated %}
+  <li class="nav-item">
+      <a href="#following" data-bs-toggle="tab" class="nav-link">Aboneliklerim</a>
+  </li>
+  {% endif %}
+  
+  <li class="nav-item">
+      <a href="#topTen" data-bs-toggle="tab" class="nav-link">En Beğenilenler</a>
+  </li>
+</ul>
+<div class="tab-content p-4">
+  <div class="collapse tab-pane fade show active" id="suggestions"> <!--Öneriler-->
+      {% for blog in posts_with_most_common_tags %}
+      <div class="row">  <!--Blog yazıları-->
+         <div class="col-12">
+              <div class="rounded-3 mt-4">
+                  <hr>
+                  <div class="card mb-3">
+                      <div class="row">
+                          <div class="col-4 d-none d-lg-block">
+                              <div class="d-flex align-items-center" style="height: 100%;">
+                                  <img src="{{ blog.banner.url }}" class="img-fluid"
+                                      style="max-height: 100%; max-width: 100%;" alt="">
+                              </div>
                           </div>
-                        </div>
+                          <div class="col-12 col-lg-8">
+                              <div class="card-body" style="height: 100%;">
+                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></p>
+                                  <small class="card-text mb-0"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></small>
+                                  <h5 class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></h5>
+                                  <div class="card-footer">
+                                      <div class="tags">
+                                        tags: {% for tag in blog.tags.all %} <a href="{% url 'search_tag' tag.name %}" class="badge bg-primary" > {{ tag.name }} </a> {% if not forloop.last %}, {% endif %}{% endfor %}
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
                       </div>
-                    </div>
-                    {% endfor %}
+                  </div>
+
+                  <hr>
+
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+
+  <div class="tab-pane fade" id="following"> <!--Takip edilenlerin yazıları-->
+
+      {% for blog in posts_for_followings %}
+      <div class="row">
+         <div class="col-12">
+              <div class="rounded-3 mt-4">
+
+                  <hr>
+                  <div class="card mb-3">
+                      <div class="row">
+                          <div class="col-4 d-none d-lg-block">
+                              <div class="d-flex align-items-center" style="height: 100%;">
+                                  <img src="{{ blog.banner.url }}" class="img-fluid"
+                                      style="max-height: 100%; max-width: 100%;" alt="">
+                              </div>
+                          </div>
+                          <div class="col-12 col-lg-8">
+                              <div class="card-body" style="height: 100%;">
+                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></p>
+                                  <small class="card-text mb-0"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></small>
+                                  <h5 class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></h5>
+                                  <div class="card-footer">
+                                      <div class="tags">
+                                       tags: {% for tag in blog.tags.all %} <a href="{% url 'search_tag' tag.name %}" class="badge bg-primary" > {{ tag.name }} </a> {% if not forloop.last %}, {% endif %}{% endfor %}
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <hr>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+  <div class="tab-pane fade" id="topTen"> <!--En çok beğeni alanlar-->
+      {% for blog in most_liked_posts %}
+      <div class="row justify-content-center">
+          <div class="col-8 ">
+              <div class="rounded-3 mt-4">
+
+                  <div class="card mb-3">
+                      <div class="row">
+                          <div class="col-4 d-none d-lg-block">
+                              <div class="d-flex align-items-center" style="height: 100%;">
+                                  <img src="{{ blog.banner.url }}" class="img-fluid ps-4"
+                                      style="max-height: 100%; max-width: 100%;" alt="">
+                              </div>
+                          </div>
+                          <div class="col-12 col-lg-8">
+                              <div class="card-body" style="height: 100%;">
+                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></p>
+                                  <small class="card-text mb-0"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></small>
+                                  <h5 class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></h5>
+                                  <div class="card-footer">
+                                      <div class="tags">
+                                        tags: {% for tag in blog.tags.all %} <a href="{% url 'search_tag' tag.name %}" class="badge bg-primary" > {{ tag.name }} </a> {% if not forloop.last %}, {% endif %}{% endfor %}
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
 </div>
 
-{% endblock content %}
+</div>
 
+
+{% endblock content %}
 
 

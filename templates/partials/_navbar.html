@@ -2,10 +2,12 @@
 {% if user.is_authenticated %}
 <!-- Giriş Yapıldığında Navbar -->
 
+
+
 <nav class="navbar navbar-expand-md fixed-top">
     <div class="container-fluid">
-        <a href="#anasayfa">  <!-- link ekleyemedim ekleyince bozuluyor-->
-            <img src="{% static 'img/logo2.png' %}" alt="Logo">
+        <a href="{% url 'index' %}" class="navbar-logo">
+            <img src="{% static 'img/logo2.png' %}" alt="Logo" style="width: 150px; height: auto;">
         </a>
 
         <button type="button" class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
@@ -26,7 +28,7 @@
                 
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#" aria-label="Yazmaya Başla">
+                    <a class="nav-link" href="{% url 'yazmayabasla' %}" aria-label="Yazmaya Başla">
                         <i class="fa-regular fa-pen-to-square fa-lg"></i>
                     </a>
                 </li>
