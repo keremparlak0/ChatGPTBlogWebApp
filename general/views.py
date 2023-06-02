@@ -113,6 +113,8 @@ def get_recommendations(user, limit=10):
 
     return recommended_posts
 
+get_random_posts = lambda count: Blog.objects.order_by('?')[:count]
+
 def author_search(text):
     tokens = text.split()
 
@@ -142,13 +144,25 @@ def index(request):
         posts = metni_ara(query1)
         posts = posts.order_by('-interaction', '-date')
         
-        try:
-            author_results = author_search(query1)
-            author_results = author_results.order_by('-rank')
-        except:
-            author_results = None
+        
+        author_results = author_search(query1)
+        print(author_results)
+        print([r[1] for r in author_results])
+        author_results = Author.objects.filter(id__in=[r[1] for r in author_results])
+        print(author_results)
+        author_blogs = Blog.objects.filter(author__in=author_results).order_by('-interaction', '-date')
+        
+        # En çok okunan gönderiler
+        most_read_posts = Blog.objects.all().order_by('-interaction', '-date')[:10]
+        # taglara göre öneri
+        posts_with_most_common_tags = get_posts_with_most_common_tags(num_tags=10)
+        # En çok beğenilen 10 gönderi
+        most_liked_posts = Blog.objects.annotate(like_count=Count('likes')).order_by('-like_count')[:10]
 
-        return render(request, 'general/index.html', {'blogs': posts})
+        if author_results:
+            print("author_results")
+
+        return render(request, 'general/index.html', {'blogs': posts, 'authors': author_results, 'query': query1, 'author_blogs': author_blogs, 'most_read_posts': most_read_posts, 'posts_with_most_common_tags': posts_with_most_common_tags, 'most_liked_posts': most_liked_posts})
         
     if request.method == "GET":
         blogs = Blog.objects.all()
@@ -161,6 +175,8 @@ def index(request):
         most_liked_posts = Blog.objects.annotate(like_count=Count('likes')).order_by('-like_count')[:10]
 
         top_tags = Tag.objects.annotate(num_likes=Count('userlikedpost')).order_by('-num_likes')
+
+
         print(top_tags)
         # Takipçilerin gönderileri
         if request.user.is_authenticated:
