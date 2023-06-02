@@ -11,8 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import dj_database_url
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +25,7 @@ SECRET_KEY = 'django-insecure-(px3tl_#=de@+izi_yulga%j#48q5o^-45d8fc(d+x=v%i%=0s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -46,7 +44,6 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     "taggit",
     'django.contrib.postgres',
-    
 ]
 
 MIDDLEWARE = [
@@ -83,19 +80,15 @@ WSGI_APPLICATION = 'grup_14.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-'''DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'grup_14',
         'USER': 'postgres',
         'PASSWORD': 'Vural',
-        'HOST': 'db',
+        'HOST': '3.86.161.21',
         'PORT': 5432,
     }
-}'''
-
-DATABASES = { 
-    'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
 }
 
 
