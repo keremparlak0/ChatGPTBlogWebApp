@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': 'grup_14',
         'USER': 'postgres',
         'PASSWORD': 'Vural',
-        'HOST': 'db', # 3.86.161.21
+        'HOST': '3.86.161.21', # db
         'PORT': 5432,
     }
 }
