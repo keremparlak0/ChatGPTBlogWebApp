@@ -8,21 +8,25 @@
     <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <title>
         {% block title %} {%endblock%} | AIBlog</title>
 </head>
+
 <body>
     {% include 'partials/_navbar.html' %}
     {% include 'partials/_menu.html' %}
-
+    <script src="{% static 'admin/js/like.js' %}"></script>
+    <script src="{% static 'admin/js/comment.js' %}"></script>
+    <script src="{% static 'admin/js/editor.js' %}"></script>
     {% block content %}{% endblock %}
-
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/all.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/chatGPT.js' %}"></script>
 
+    
     {% include 'partials/_footer.html' %}
 </body>
 </html>

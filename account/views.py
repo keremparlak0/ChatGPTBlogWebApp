@@ -4,18 +4,23 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from author.forms import UserProfileForm
+from author.models import UserProfile
+from django.core.files import File
 
 def login_request(request):
     if request.user.is_authenticated:
         return redirect("index")
-
+    
     if request.method == "POST":
+        
         username = request.POST["username"]
         password = request.POST["password"]
 
         user = authenticate(request, username = username, password = password)
 
         if user is not None:
+            
             login(request, user)
             nextUrl = request.GET.get("next",None)
             if nextUrl is None:
@@ -44,34 +49,50 @@ def register_request(request):
                 return render(request, "account/register.html", 
                 {
                     "error":"username kullanılıyor.",
-                    "username":username,
                     "email":email,
                     "firstname": firstname,
-                    "lastname":lastname
+                    "lastname":lastname,
+                    "password":password,
+                    "repassword":repassword,
                 })
-            else:
-                if User.objects.filter(email=email).exists():
+            
+            elif User.objects.filter(email=email).exists():
                     return render(request, "account/register.html", 
                     {
                         "error":"email kullanılıyor.",
                         "username":username,
-                        "email":email,
                         "firstname": firstname,
-                        "lastname":lastname
+                        "lastname":lastname,
+                        "password":password,
+                        "repassword":repassword,
                     })
-                else:
-                    user = User.objects.create_user(username=username,email=email,first_name=firstname,last_name=lastname,password=password)
-                    user.save()
-                    user = authenticate(username=username, password=password)
-                    login(request, user)
-                    return redirect("index")                
+            else:
+                user = User.objects.create_user(username=username,email=email,first_name=firstname,last_name=lastname,password=password)
+                user.save()
+                user_profile = UserProfile()
+                user_profile.user = user
+                with open('static/img/profil.png', 'rb') as f:
+                    default_profile_picture = File(f)
+                    
+                    user_profile.profile_picture.save('profil.png', default_profile_picture)
+                user_profile.save()
+
+                user = authenticate(username=username, password=password)
+                
+                    
+                
+                    # Kullanıcının profil fotoğrafı yok, varsayılan fotoğrafı ata
+
+                login(request, user)
+                return redirect("index")                
         else:
             return render(request, "account/register.html", {
                 "error":"parola eşleşmiyor.",
                 "username":username,
                 "email":email,
                 "firstname": firstname,
-                "lastname":lastname
+                "lastname":lastname,
+                
             })
 
     return render(request, "account/register.html")

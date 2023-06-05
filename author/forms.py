@@ -1,6 +1,13 @@
 from django import forms
 from ckeditor.widgets import CKEditorWidget
 from author.models import *
+from django.contrib.auth.forms import UserCreationForm
+
+# User Model Form
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('profile_picture',)  # Diğer profil alanlarını buraya ekleyebilirsiniz
 
 # Blog Model Form
 class PublishForm(forms.ModelForm):
@@ -45,7 +52,7 @@ class Editor(forms.ModelForm):
         fields = ['title','content']
         widgets = {
             "title": forms.TextInput(attrs={"class":"form-control"}),
-            "content": CKEditorWidget(),
+            "content": forms.Textarea(attrs={"class":"form-control"}),
         }
         
 

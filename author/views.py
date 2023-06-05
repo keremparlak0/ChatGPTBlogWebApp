@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 
 from author.forms import *
 from author.models import *
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 # site/author/editor
@@ -109,6 +111,11 @@ def update(request, message=""):
                 picture = request.FILES["picture"],
                 )
             author.save() 
+            user_profile = UserProfile.objects.get(user=request.user)
+            user_profile.profile_picture = author.picture
+            user_profile.save()
+            
+
             return redirect("panel")
         else:
             return HttpResponse("form geçerli değil")
@@ -150,3 +157,37 @@ def yazmayabasla(request):
         return redirect("editor", draft_id=draft.id)
     except:
         return redirect("update")
+    
+
+@csrf_exempt
+def publishajax(request):
+    user = request.user
+    author = Author.objects.get(user_id=user)
+    if request.method == 'POST':
+        print("POST geldiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+        # Formdan gelen verileri al
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        draft_id = request.POST.get('draft_id')
+        if content == "" or title == "":
+            return JsonResponse({'success': False, 'message': 'Başlık veya içerik boş olamaz'}, status=400)
+        print(title)    
+        print(content)
+        try:
+            draft = Draft.objects.get(id=draft_id)
+            draft.title = title
+            draft.content = content
+            draft.save()
+        except:
+            draft = Draft.objects.create(author=author, title=title, content=content)
+        draft.save()
+
+        
+        
+
+
+        # Başarılı yanıt döndür
+        return JsonResponse({'success': True, 'draft_id': draft.id})
+    
+    # Hatalı istek durumunda hata yanıtı döndür
+    return JsonResponse({'success': False, 'message': 'Geçersiz istek'}, status=400)

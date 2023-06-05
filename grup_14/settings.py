@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     "taggit",
     'django.contrib.postgres',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -80,16 +81,24 @@ WSGI_APPLICATION = 'grup_14.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'grup_14',
         'USER': 'postgres',
         'PASSWORD': 'Vural',
-        'HOST': '3.86.161.21', # db
+        'HOST': 'db', # 3.86.161.21
         'PORT': 5432,
     }
 }
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'grup_14.db',
+    }
+}
+
 
 
 # Password validation

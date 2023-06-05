@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
+from ckeditor.fields import RichTextField
 from taggit.managers import TaggableManager
 from django.db import models
 from django.utils.text import slugify
@@ -20,6 +21,22 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.postgres.search import SearchVector
 from django.db.models import Count
+
+# user profil fotoğrafı için
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='pictures/', blank=True, null=True, default='{% static "img/profil.png" %}')
+    # Diğer profil özelliklerini burada tanımlayabilirsiniz
+
+    def __str__(self):
+        return self.user.username
+    
+    def to_dict(self):
+        return {
+            'user': self.user.username,
+            'profile_picture': self.profile_picture.url if self.profile_picture else None
+            # Diğer profil özelliklerini burada JSON'a dönüştürerek ekleyebilirsiniz
+        }
 
 class Author(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -47,7 +64,7 @@ class Author(models.Model):
 class Draft(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    content = RichTextUploadingField()
+    content = RichTextField( blank=True, null=True )
     def __str__(self):
         return self.title
     
@@ -63,18 +80,18 @@ class Blog(models.Model):
     tags = models.CharField(max_length=500)
     date = models.DateField(auto_now=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='blogs')
-    stemmed_author_user = models.TextField(default="", blank=True, null=True)
-    stemmed_author_name_surname = models.TextField(default="", blank=True, null=True)
     likes = models.ManyToManyField(User, related_name='blog_posts')
     tags = TaggableManager()
     interaction = models.IntegerField(default=0)
     favorite = models.ManyToManyField(User, related_name='favorite_posts', blank=True)
-    stemmed_content = models.TextField(default="", blank=True, null=True)
+    '''stemmed_content = models.TextField(default="", blank=True, null=True)
     stemmed_title = models.TextField(default="", blank=True, null=True)
     stemmed_tags = models.TextField(default="", blank=True, null=True)
     search_post = SearchVectorField(null=True)
     tags_full = models.CharField(max_length=2550, blank=True, null=True)
     search_author = SearchVectorField(null=True)
+    stemmed_author_user = models.TextField(default="", blank=True, null=True)
+    stemmed_author_name_surname = models.TextField(default="", blank=True, null=True)'''
     
     def total_likes(self):
         return self.likes.count()
@@ -83,7 +100,7 @@ class Blog(models.Model):
     def get_most_liked_posts(cls, limit=10):
         return cls.objects.annotate(num_likes=Count('likes')).order_by('-num_likes', '-date')[:limit]
 
-    def remove_html_tags(self, text):
+    '''def remove_html_tags(self, text):
         soup = BeautifulSoup(text, 'html.parser')
         return soup.get_text()
 
@@ -125,7 +142,7 @@ class Blog(models.Model):
         result = " ".join(item for item in aa if not any(p in item for p in punctuation))
                 
 
-        return result
+        return result'''
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -137,14 +154,14 @@ class Blog(models.Model):
                 counter += 1
             self.slug = slug
     
-        content_without_html = self.remove_html_tags(self.draft.content)
+        '''content_without_html = self.remove_html_tags(self.draft.content)
         self.stemmed_content = self.stemmerTurkish(content_without_html)
         self.stemmed_title = self.stemmerTurkish(self.draft.title)
         self.stemmed_author_user = self.author.user.username
-        self.stemmed_author_name_surname = self.author.user.first_name + " " + self.author.user.last_name
+        self.stemmed_author_name_surname = self.author.user.first_name + " " + self.author.user.last_name'''
         super().save(*args, **kwargs)
 
-    @receiver(post_save, sender=TaggedItem)
+    '''@receiver(post_save, sender=TaggedItem)
     def handle_taggeditem_save(sender, instance, **kwargs):
         # TaggedItem tablosu güncellendiğinde burası çalışacak
         # İşlemlerinizi burada gerçekleştirin
@@ -154,10 +171,10 @@ class Blog(models.Model):
         post = instance.content_object
         
         if isinstance(post, Blog):
-            post.update_tags_full()
+            post.update_tags_full()'''
         
 
-    def update_search_post(self):
+    '''def update_search_post(self):
         
         self.search_post = (
             SearchVector('stemmed_title', weight='A', config='simple') +
@@ -186,7 +203,7 @@ class Blog(models.Model):
     class Meta:
         indexes = [
             GinIndex(fields=['search_post', 'search_author']),
-        ]
+        ]'''
 
     @property
     def blog_id(self):
@@ -207,6 +224,7 @@ class Comments(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=500)
     date = models.DateField(auto_now=True)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     reply = models.ForeignKey("Comments",on_delete=models.DO_NOTHING, blank=True, null=True)
 
     @property
@@ -218,4 +236,5 @@ class UserLikedPost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_posts')
     post = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='liked_by')
     tags = models.ManyToManyField(Tag)
+    
 

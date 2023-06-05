@@ -19,4 +19,6 @@ urlpatterns = [
     path('blog/<int:blog_id>/comment/', views.commentAction, name='commentAction'),
 
     path('tags/<str:tag>', views.search_tag, name='search_tag'),
+    path('likeajax/', views.likeajax, name='likeajax'),
+    path('commentajax/', views.commentajax, name='commentajax'),
 ]

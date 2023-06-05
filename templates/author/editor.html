@@ -15,15 +15,16 @@
     <div class="row">
       <div class="col-lg-8 editor">
           <div class="mb-3">
-            <form method="post">
+            <form method="post" id="draftForm">
               {% csrf_token %}
-              {{form}}
-            
-              <button type="submit" value="submit" class="btn btnRenk" type="button" id="save">Kaydet</button>
+              {{ form.media }}
+              {{ form.as_p }}
+              
+            <button type="submit" name="action" id="draft-id" value="{{ draft.id }}" class="btn btn-secondary"> Kaydet </button>
             </form>
           </div>
           <div class="mb-3 d-flex justify-content-end">
-            <a href="{% url 'publishDraft' draft.draft_id %}" class="btn btn-primary"> Yayınla </a>       
+            <a href="{% url 'publishDraft' draft.draft_id %}" id="publishBtn" class="btn btn-primary" style="display: none;"> Yayınla </a>       
         </div>
     </div>   
     
@@ -45,8 +46,7 @@
   
 
 
-<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
-<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+
 
 <script type="text/javascript" src="{% static 'js/getSuggestion.js' %}"></script>
 {% endblock content %}

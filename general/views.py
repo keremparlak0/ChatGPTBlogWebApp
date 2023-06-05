@@ -13,7 +13,7 @@ from author.models import *
 from django.contrib.postgres.search import TrigramSimilarity, TrigramDistance
 from django.contrib.postgres.search import SearchQuery, SearchRank
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-
+from django.views.decorators.http import require_POST
 from django.db.models import FloatField
 from django.db.models.functions import Cast
 from django.db.models import F, Value
@@ -24,14 +24,18 @@ from .zemberekkk import MyService
 from taggit.models import Tag, TaggedItem
 from django.db import connections
 from django.db.models import Max
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 
 
 def search_tag(request, tag):
-    blogs = Blog.objects.filter(tags__name__in=[tag])
+    blogs = Blog.objects.filter(tags__name__in=[tag]).order_by('-interaction', '-date')
     return render(request, 'general/index.html', {"blogs":blogs})
 
-def koklerine_ayir(text):
+'''def koklerine_ayir(text):
     object1 = MyService()
     punctuation = [".", ",", "?", "!", ":", ";", "'", '"', "(", ")", "[", "]", "{", "}" ]
     
@@ -136,69 +140,71 @@ def author_search(text):
 
     return results
 
+def get_post_for_following(user):
+    followings = user.following.all()
+    posts_for_followings = Blog.objects.filter(author__in=[r.following for r in followings]).order_by('-interaction', '-date') # takip edilenlerin gönderileri
+    #posts_for_followings = posts_for_followings.exclude(liked_by__user=user) # kullanıcının beğendiği gönderileri çıkar
+    return posts_for_followings'''
 
 def index(request):
-    query1 = request.GET.get('query')
-    if query1:
+    #query1 = request.GET.get('query')
+    blogs = Blog.objects.all().order_by('-date')
+
+    # En çok okunan gönderiler
+    most_read_posts = Blog.objects.all().order_by('-interaction', '-date')[:10]
+    
+    # taglara göre öneri
+    '''posts_with_most_common_tags = get_posts_with_most_common_tags(num_tags=10)
+
+    # En çok beğenilen 10 gönderi
+    most_liked_posts = Blog.objects.annotate(like_count=Count('likes')).order_by('-like_count')[:10]'''
+    return render(request, 'general/index.html', {'blogs': blogs})
+    if request.user.is_authenticated:
+        user = request.user
+
+        # Takip edilenler
+        followings = user.following.all()
+
+        # Takip edilenlerin gönderileri
+        '''posts_for_followings = get_post_for_following(user)
+
+        # Önerilen gönderiler
+        recommended_posts = get_recommendations(user=request.user, limit=10)
+
+        try:
+            author = Author.objects.get(user=request.user)
+
+            # takipçiler 
+            followers = author.followers.all()         
+            
+        except:
+            author = None'''
+
+    # Arama yapıldıysa
+    '''if query1:
         
+        # Metin arama
         posts = metni_ara(query1)
         posts = posts.order_by('-interaction', '-date')
-        
-        
+
+        # Yazar arama
         author_results = author_search(query1)
-        print(author_results)
-        print([r[1] for r in author_results])
         author_results = Author.objects.filter(id__in=[r[1] for r in author_results])
-        print(author_results)
         author_blogs = Blog.objects.filter(author__in=author_results).order_by('-interaction', '-date')
         
-        # En çok okunan gönderiler
-        most_read_posts = Blog.objects.all().order_by('-interaction', '-date')[:10]
-        # taglara göre öneri
-        posts_with_most_common_tags = get_posts_with_most_common_tags(num_tags=10)
-        # En çok beğenilen 10 gönderi
-        most_liked_posts = Blog.objects.annotate(like_count=Count('likes')).order_by('-like_count')[:10]
 
-        if author_results:
-            print("author_results")
-
-        return render(request, 'general/index.html', {'blogs': posts, 'authors': author_results, 'query': query1, 'author_blogs': author_blogs, 'most_read_posts': most_read_posts, 'posts_with_most_common_tags': posts_with_most_common_tags, 'most_liked_posts': most_liked_posts})
-        
+        return render(request, 'general/index.html', {'blogs': posts, 'user_profile': user_profile, 'authors': author_results, 'query': query1, 'author_blogs': author_blogs, 'most_read_posts': most_read_posts, 'posts_with_most_common_tags': posts_with_most_common_tags, 'most_liked_posts': most_liked_posts, 'posts_for_followings': posts_for_followings})
+'''
+    # Arama yapılmadıysa       
     if request.method == "GET":
         blogs = Blog.objects.all()
 
-        # En çok okunan gönderiler
-        most_read_posts = Blog.objects.all().order_by('-interaction', '-date')[:10]
-        # taglara göre öneri
-        posts_with_most_common_tags = get_posts_with_most_common_tags(num_tags=10)
-        # En çok beğenilen 10 gönderi
-        most_liked_posts = Blog.objects.annotate(like_count=Count('likes')).order_by('-like_count')[:10]
-
-        top_tags = Tag.objects.annotate(num_likes=Count('userlikedpost')).order_by('-num_likes')
-
-
-        print(top_tags)
         # Takipçilerin gönderileri
-        if request.user.is_authenticated:
-            recommended_posts = get_recommendations(user=request.user, limit=10)
-            print("burada1")
-            kullanici = request.user
-            followings = kullanici.following.all() # takip edilenler 
-            for i in followings:
-                print(i.following.user.username)
-            posts_for_followings = Blog.objects.filter(author__in=[r.following for r in followings]).order_by('-interaction', '-date') # takip edilenlerin gönderileri
-            try:
-                author = Author.objects.get(user=request.user)
-                followers = author.followers.all() # takipçiler         
-                return render(request, 'general/index.html', {"blogs":blogs, "most_read_posts":most_read_posts, "most_liked_posts":most_liked_posts, "posts_with_most_common_tags":posts_with_most_common_tags, "recommended_posts":recommended_posts, "posts_for_followings":posts_for_followings, "followings":followings, "followers":followers})
-            except:
-                author = None
-            return render(request, 'general/index.html', {"blogs":blogs, "most_read_posts":most_read_posts, "most_liked_posts":most_liked_posts, "posts_with_most_common_tags":posts_with_most_common_tags, "recommended_posts":recommended_posts, "posts_for_followings":posts_for_followings, "followings":followings})
-       
-        
-        
-        return render(request, 'general/index.html', {"blogs":blogs, "most_read_posts":most_read_posts, "most_liked_posts":most_liked_posts, "posts_with_most_common_tags":posts_with_most_common_tags})
     
+            
+            
+        return render(request, 'general/index.html', {"blogs":blogs})
+           
     # arama işlemi 
     elif request.method == "POST":
         #search()    ~Vural
@@ -253,9 +259,15 @@ def getProfileByID(request, profile_id):
     return render(request, 'general/profile.html', context)
 
 def getBlogBySlug(request, blog_slug):
+    user = request.user
+    
     blog = Blog.objects.get(slug=blog_slug)
     blog.interaction += 1
     blog.save()
+
+    liked = False
+    if request.user.is_authenticated and blog.likes.filter(id=request.user.id).exists():
+        liked = True
 
     button_name = "Takip Et" 
     if request.user.is_authenticated and Follow.objects.filter(follower=request.user, following=blog.author).exists():
@@ -268,13 +280,21 @@ def getBlogBySlug(request, blog_slug):
         'form': form,
         'comments':comments,
         'button_name':button_name,
+        'liked':liked,
+        'user':user,
+        
     }
     return render(request, 'general/blog.html', context)
 
 def getBLogById(request, blog_id):
+    user = request.user
     blog = Blog.objects.get(id=blog_id)
     blog.interaction += 1
     blog.save()
+
+    liked = False
+    if request.user.is_authenticated and blog.likes.filter(id=request.user.id).exists():
+        liked = True
 
     button_name = "Takip Et" 
     if request.user.is_authenticated and Follow.objects.filter(follower=request.user, following=blog.author).exists():
@@ -287,6 +307,9 @@ def getBLogById(request, blog_id):
         'form':form,
         'comments':comments,
         'button_name':button_name,
+        'liked':liked,
+        'user':user,
+       
     }
     return render(request, 'general/blog.html', context)
 
@@ -319,8 +342,9 @@ def followAction(request, profile_id):
         return redirect("login")
    
     
-@login_required
+@login_required 
 def like(request, blog_id):
+    
     user = request.user
     post = Blog.objects.get(id=blog_id)
     user_liked_post = UserLikedPost(user=user, post=post)
@@ -336,11 +360,10 @@ def like(request, blog_id):
         liked = True
         blog.likes.add(request.user)
     
-    return redirect('blogbyslug',blog.slug)
-
-
+    return redirect('blogbyslug',blog.id)
 
 @login_required
+@csrf_exempt
 def commentAction(request, blog_id=0 ,comment_id=0):
     if request.method == "POST":
 
@@ -352,6 +375,9 @@ def commentAction(request, blog_id=0 ,comment_id=0):
                 user_id = request.user,
                 message = request.POST["message"]
             )
+           
+            user_profile = UserProfile.objects.get(user=request.user)
+            comment.user_profile = user_profile
             comment.save()
 
         elif blog_id==0:
@@ -364,3 +390,59 @@ def commentAction(request, blog_id=0 ,comment_id=0):
         #     pass
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@csrf_exempt
+def likeajax(request):
+    print("likeajax")
+    blog_id = request.POST.get('blog_id')
+    print(blog_id)
+    user = request.user
+    post = Blog.objects.get(id=blog_id)
+    user_liked_post = UserLikedPost(user=user, post=post)
+    user_liked_post.save()
+    user_liked_post.tags.add(*post.tags.all())
+
+    blog = Blog.objects.get(pk=request.POST.get('blog_id'))
+    liked = False
+    if blog.likes.filter(id=request.user.id).exists():
+        blog.likes.remove(request.user)
+        liked = False
+    else:
+        liked = True
+        blog.likes.add(request.user)
+    
+    response = {
+        'liked':liked,
+        'count':blog.total_likes(),
+    }
+    return JsonResponse(response)
+
+import json
+
+
+@csrf_exempt
+def commentajax(request):
+    
+    if request.method == "POST":
+        print("commentajax")
+        blog_id = request.POST.get('blog_id')
+        print(blog_id)
+        blog = Blog.objects.get(pk=blog_id)
+        comment = Comments(
+            blog_id = blog,
+            user_id = request.user,
+            message = request.POST["message"]
+        )
+        
+        user_profile = UserProfile.objects.get(user=request.user)
+        comment.user_profile = user_profile
+        comment.save()
+        user_profile_dict = user_profile.to_dict()  # UserProfile nesnesini JSON'a dönüştürmek için to_dict() yöntemini kullanın
+        print(user_profile_dict)
+        response = {
+            'message':comment.message,
+            'user':comment.user_id.username,
+            'profile_picture':user_profile_dict['profile_picture'],     
+        }
+        return JsonResponse(response)
