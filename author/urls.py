@@ -13,4 +13,5 @@ urlpatterns = [
     path('publish/<int:draft_id>', views.publish, name="publishDraft"),     # publish draft
     path('yazmayabasla/', views.yazmayabasla, name="yazmayabasla"),         # create draft's content
     path('publishajax/', views.publishajax, name="publishajax"),            # publish draft's content
+    path('ajaxdeneme/', views.ajaxdeneme, name="ajaxdeneme"),               # ajax test
 ]

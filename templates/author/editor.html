@@ -21,11 +21,17 @@
               {{ form.as_p }}
               
             <button type="submit" name="action" id="draft-id" value="{{ draft.id }}" class="btn btn-secondary"> Kaydet </button>
+            <a href="{% url 'panel' %}" class="btn btn-secondary"> Geri </a>
             </form>
           </div>
+          
+            <div class="mb-3 d-flex justify-content-end">
+              <a href="{% url 'publishDraft' draft.draft_id %}" id="publishBtn" class="btn btn-primary" style="display: none;"> Yayınla </a>       
+            </div>
           <div class="mb-3 d-flex justify-content-end">
-            <a href="{% url 'publishDraft' draft.draft_id %}" id="publishBtn" class="btn btn-primary" style="display: none;"> Yayınla </a>       
-        </div>
+              <button type="button" id="deneme-btn" data-draft-id="{{ draft.id }}" class="btn btn-primary" style="display: none;"> Deneme </button>       
+          </div>
+          
     </div>   
     
       <!-- Öneri Kısmı -->
