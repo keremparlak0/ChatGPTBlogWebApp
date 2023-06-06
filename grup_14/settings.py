@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     "taggit",
     'django.contrib.postgres',
-    'widget_tweaks',
+    # 'widget_tweaks',
 ]
 
 MIDDLEWARE = [

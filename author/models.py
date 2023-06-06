@@ -45,7 +45,6 @@ class Author(models.Model):
     contact = models.CharField(default="",null=True, max_length=200)
     birthday = models.DateField(blank=True, null=True)
     picture = models.ImageField(blank=True, upload_to="pictures/")
-    is_author = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.user.username)

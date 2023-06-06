@@ -26,14 +26,12 @@ from django.db import connections
 from django.db.models import Max
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from snowballstemmer import TurkishStemmer
+
 
 
 
 
 def search_tag(request, tag):
-    
-
     blogs = Blog.objects.filter(tags__name__in=[tag]).order_by('-interaction', '-date')
     return render(request, 'general/index.html', {"blogs":blogs})
 
@@ -97,89 +95,6 @@ def metni_ara(query1):
 
     return posts
 
-
-get_random_posts = lambda count: Blog.objects.order_by('?')[:count]
-
-def author_search(text):
-    tokens = text.split()
-
-    query = """
-    SELECT d.id, ab.author_id, ab.stemmed_author_name_surname,ab.stemmed_author_user,
-    ts_rank(search_author, websearch_to_tsquery('simple', %s)) +
-    ts_rank(search_author, websearch_to_tsquery('simple', %s)) AS rank
-    FROM author_blog AS ab
-    INNER JOIN author_draft AS d ON ab.draft_id = d.id
-    WHERE search_author @@ websearch_to_tsquery('simple', %s)
-    OR search_author @@ websearch_to_tsquery('simple', %s)
-    """
-    tokens = " ".join(item for item in tokens)
-    params = [tokens, tokens, tokens, tokens]
-    with connections['default'].cursor() as cursor:
-        cursor.execute(query, params)
-        results = cursor.fetchall()
-        #posts = Blog.objects.filter(id__in=[r[0] for r in results])
-
-    return results'''
-
-def koklerine_ayir(text):
-    stemmer = TurkishStemmer()
-    
-    punctuation = [".", ",", "?", "!", ":", ";", "'", '"', "(", ")", "[", "]", "{", "}" ]
-    
-    analysis_input = text
-    tokens = text.split()  # Metni boşluklardan ayırarak kelimeleri liste haline getirme
-
-    aa = []
-
-    for token in tokens:
-        stemmed_word = stemmer.stemWord(token)
-        aa.append(stemmed_word)
-            
-    
-    result = " ".join(item for item in aa if not any(p in item for p in punctuation))
-    return result
-
-def metni_ara(query1):
-    query = """
-    SELECT d.id, ab.stemmed_title, ab.stemmed_content, ab.stemmed_tags, ab.stemmed_author_user,
-    ts_rank(search_post, websearch_to_tsquery('simple', %s)) +
-    ts_rank(search_post, websearch_to_tsquery('simple', %s)) AS rank
-    FROM author_blog AS ab
-    INNER JOIN author_draft AS d ON ab.draft_id = d.id
-    WHERE search_post @@ websearch_to_tsquery('simple', %s)
-    OR search_post @@ websearch_to_tsquery('simple', %s)
-    """
-    search_query = koklerine_ayir(query1)
-    print("search_query: " + search_query)
-    params = [search_query, search_query, search_query, search_query]
-    with connections['default'].cursor() as cursor:
-        cursor.execute(query, params)
-        results = cursor.fetchall()
-        posts = Blog.objects.filter(id__in=[r[0] for r in results])
-
-    return posts
-
-def author_search(text):
-    tokens = text.split()
-
-    query = """
-    SELECT d.id, ab.author_id, ab.stemmed_author_name_surname,ab.stemmed_author_user,
-    ts_rank(search_author, websearch_to_tsquery('simple', %s)) +
-    ts_rank(search_author, websearch_to_tsquery('simple', %s)) AS rank
-    FROM author_blog AS ab
-    INNER JOIN author_draft AS d ON ab.draft_id = d.id
-    WHERE search_author @@ websearch_to_tsquery('simple', %s)
-    OR search_author @@ websearch_to_tsquery('simple', %s)
-    """
-    tokens = " ".join(item for item in tokens)
-    params = [tokens, tokens, tokens, tokens]
-    with connections['default'].cursor() as cursor:
-        cursor.execute(query, params)
-        results = cursor.fetchall()
-        #posts = Blog.objects.filter(id__in=[r[0] for r in results])
-
-    return results
-
 # tag lara göre öneri için en çok bulunan tagları alıyoruz
 def get_most_common_tags(num_tags=5):
     most_common_tags = TaggedItem.objects.values('tag_id').annotate(tag_count=Count('tag_id')).order_by('-tag_count')[:num_tags]
@@ -202,16 +117,36 @@ def get_recommendations(user, limit=10):
 
     return recommended_posts
 
+get_random_posts = lambda count: Blog.objects.order_by('?')[:count]
+
+def author_search(text):
+    tokens = text.split()
+
+    query = """
+    SELECT d.id, ab.author_id, ab.stemmed_author_name_surname,ab.stemmed_author_user,
+    ts_rank(search_author, websearch_to_tsquery('simple', %s)) +
+    ts_rank(search_author, websearch_to_tsquery('simple', %s)) AS rank
+    FROM author_blog AS ab
+    INNER JOIN author_draft AS d ON ab.draft_id = d.id
+    WHERE search_author @@ websearch_to_tsquery('simple', %s)
+    OR search_author @@ websearch_to_tsquery('simple', %s)
+    """
+    tokens = " ".join(item for item in tokens)
+    params = [tokens, tokens, tokens, tokens]
+    with connections['default'].cursor() as cursor:
+        cursor.execute(query, params)
+        results = cursor.fetchall()
+        #posts = Blog.objects.filter(id__in=[r[0] for r in results])
+
+    return results
+
 def get_post_for_following(user):
     followings = user.following.all()
     posts_for_followings = Blog.objects.filter(author__in=[r.following for r in followings]).order_by('-interaction', '-date') # takip edilenlerin gönderileri
     #posts_for_followings = posts_for_followings.exclude(liked_by__user=user) # kullanıcının beğendiği gönderileri çıkar
-    return posts_for_followings
+    return posts_for_followings'''
 
 def index(request):
-    
-    
-    
     #query1 = request.GET.get('query')
     blogs = Blog.objects.all().order_by('-date')
 
