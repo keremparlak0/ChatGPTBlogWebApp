@@ -1,7 +1,7 @@
 const tagsInput = document.querySelector("#id_tags");
 const publishButton = document.querySelector(".btnRenk");
 
-const API_KEY = "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";
+const API_KEY = "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";
 const content = sessionStorage.getItem("content");
 // console.log(content);
 const getTags = async () => {
@@ -28,8 +28,8 @@ const getTags = async () => {
       const data = await response.json();
       const cleaned = data.choices[0].text;
       const tags = cleaned.split("\n\n")[1];
-
-      tagsInput.value = tags;
+      console.log(tags);
+      //tagsInput.value = tags;
 
       publishButton.addEventListener("click", () => {
         sessionStorage.clear();

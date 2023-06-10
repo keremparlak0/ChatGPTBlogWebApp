@@ -11,3 +11,6 @@ openai
 psycopg2-binary
 protobuf==3.20.0
 django-allauth
+gunicorn
+dj-database-url
+python-dotenv

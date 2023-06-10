@@ -89,8 +89,8 @@
 
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
-        <a href="#anasayfa">
-            <img src="{% static 'img/logo2.png' %}" alt="Logo">
+        <a href="{% url 'index' %}" class="navbar-logo">
+            <img src="{% static 'img/logo2.png' %}" alt="Logo" style="width: 150px; height: auto;">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
@@ -104,8 +104,8 @@
 
             <!-- Search -->
 
-            <form action="{% url 'search' %}" class="form-search" role="search" id="search">
-                <input name="q" class="form-control " type="search" placeholder="Arama yap" aria-label="Search">
+            <form action="{% url 'index' %}" class="form-search" role="search" id="search">
+                <input id="query" name="query" class="form-control " type="search" placeholder="Arama yap" aria-label="Search">
             </form>
 
             <ul class="navbar-nav">

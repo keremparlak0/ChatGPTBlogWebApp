@@ -132,8 +132,7 @@
             <div class="profile-info" style="display: flex;">
               <img src="{{ blog.author.picture.url }}" class="profile-image2" alt="Profil Resmi">
               <div class="author-details">
-                <h5><a href="{% url 'profilebyid' blog.author.id %}">{{ blog.author.user.first_name }} {{
-                    blog.author.user.last_name }}</a></h5>
+                <h5><a href="{% url 'profilebyid' blog.author.id %}">{{ blog.author.user.first_name }} {{blog.author.user.last_name }}</a></h5>
                 <div class="stats">
                   <p><a href="#"> {{ blog.author.follower_count }} Takipçi </a></p>
                   <span class="separator"></span>

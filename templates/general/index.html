@@ -51,7 +51,7 @@
               <hr>
               <div class="about">
                 <p> {{ author.about }} </p>
-                <p> {{ author.contact }} </p>
+                
             </div>
             
             </div>
@@ -61,6 +61,7 @@
     </div>
     {% endfor %}
     {% endif %}
+
     {% if author_blogs %}
     {% for blog in author_blogs %}
     <div class="row justify-content-center">  
@@ -77,9 +78,10 @@
                           </div>
                           <div class="col-12 col-lg-8">
                               <div class="card-body" style="height: 100%;">
-                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></p>
+                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.draft.title}}</a></p>
                                   <small class="card-text mb-0"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></small>
                                   <h5 class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></h5>
+                                  <p class="card-text">{{ blog.date }}
                                   <div class="card-footer">
                                       <div class="tags">
                                         tags: {% for tag in blog.tags.all %} <a href="{% url 'search_tag' tag.name %}" class="badge bg-primary" > {{ tag.name }} </a> {% if not forloop.last %}, {% endif %}{% endfor %}
@@ -114,9 +116,10 @@
                           </div>
                           <div class="col-12 col-lg-8">
                               <div class="card-body" style="height: 100%;">
-                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></p>
+                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.draft.title}}</a></p>
                                   <small class="card-text mb-0"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></small>
                                   <h5 class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></h5>
+                                  <p class="card-text">{{ blog.date }}
                                   <div class="card-footer">
                                       <div class="tags">
                                         tags: {% for tag in blog.tags.all %} <a href="{% url 'search_tag' tag.name %}" class="badge bg-primary" > {{ tag.name }} </a> {% if not forloop.last %}, {% endif %}{% endfor %}
@@ -137,7 +140,7 @@
 
 
   <div class="tab-pane fade" id="suggestions"> <!--Öneriler-->
-      {% for blog in posts_with_most_common_tags %}
+      {% for blog in recommended_posts %}
       <div class="row justify-content-center">  <!--Blog yazıları-->
          <div class="col-8">
               <div class="rounded-3 mt-4">
@@ -152,9 +155,10 @@
                           </div>
                           <div class="col-12 col-lg-8">
                               <div class="card-body" style="height: 100%;">
-                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></p>
+                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.draft.title}}</a></p>
                                   <small class="card-text mb-0"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></small>
                                   <h5 class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></h5>
+                                  <p class="card-text">{{ blog.date }}
                                   <div class="card-footer">
                                       <div class="tags">
                                         tags: {% for tag in blog.tags.all %} <a href="{% url 'search_tag' tag.name %}" class="badge bg-primary" > {{ tag.name }} </a> {% if not forloop.last %}, {% endif %}{% endfor %}
@@ -191,9 +195,10 @@
                           </div>
                           <div class="col-12 col-lg-8">
                               <div class="card-body" style="height: 100%;">
-                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></p>
+                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.draft.title}}</a></p>
                                   <small class="card-text mb-0"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></small>
                                   <h5 class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></h5>
+                                  <p class="card-text">{{ blog.date }}
                                   <div class="card-footer">
                                       <div class="tags">
                                        tags: {% for tag in blog.tags.all %} <a href="{% url 'search_tag' tag.name %}" class="badge bg-primary" > {{ tag.name }} </a> {% if not forloop.last %}, {% endif %}{% endfor %}
@@ -210,6 +215,7 @@
       </div>
       {% endfor %}
   </div>
+
   <div class="tab-pane fade" id="topTen"> <!--En çok beğeni alanlar-->
       {% for blog in most_liked_posts %}
       <div class="row justify-content-center">
@@ -226,7 +232,7 @@
                           </div>
                           <div class="col-12 col-lg-8">
                               <div class="card-body" style="height: 100%;">
-                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.title}}</a></p>
+                                  <p class="card-text mb-0 bold-large"><a href="{% url 'blogbyid' blog.id %}">{{blog.draft.title}}</a></p>
                                   <small class="card-text mb-0"><a href="{% url 'profilebyslug' blog.author.slug %}"> {{ blog.author.user.first_name }} {{ blog.author.user.last_name }} </a></small>
                                   <h5 class="card-text"><a href="{% url 'blogbyid' blog.id %}">{{blog.description}}</a></h5>
                                   <div class="card-footer">
@@ -247,6 +253,7 @@
 </div>
 
 </div>
+
 
 
 {% endblock content %}

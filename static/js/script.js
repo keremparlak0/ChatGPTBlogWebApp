@@ -55,6 +55,23 @@ $(document).on('click', '#save-btn', function() {
 var updatedText = editInput.val();
 var updatedParagraph = $('<p id="about-text">' + updatedText + '</p>');
 editInput.replaceWith(updatedParagraph);
+console.log(updatedText);
+$.ajax({
+  url: '/author/aboutajax/',
+  type: 'POST',
+
+  data: {
+      'about': updatedText
+  },
+  
+  success: function(response) {
+    console.log(response.success);
+    
+  },
+  error: function(xhr, status, error) {
+    console.log(xhr.responseText);
+  }
+});
 $(this).replaceWith(editBtn);
 originalText = updatedText;
 });

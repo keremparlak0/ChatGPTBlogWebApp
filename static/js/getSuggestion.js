@@ -1,5 +1,5 @@
-const API_KEY = "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";
-const titleInput = document.querySelector("#id_title");
+//const API_KEY = "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";
+//const titleInput = document.querySelector("#id_title");
 const suggestionDiv = document.querySelector("#suggestion-div");
 
 const getSuggestion = async () => {
@@ -25,7 +25,7 @@ const getSuggestion = async () => {
         }),
       });
       const data = await response.json();
-
+      console.log(data);
       suggestionDiv.innerHTML += `
       <div class="sticky-top">
         <div class="suggestion">
