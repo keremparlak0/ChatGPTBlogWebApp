@@ -1,4 +1,10 @@
-# ChatGPTBlogWebApp
+# ChatGPTBlogWebAppz
+Merhaba! Biz AIBLOG ekibi olarak, sizlere ChatGPT teknolojisi kullanarak desteklenen bir platform sunuyoruz. Amacımız, kullanıcılarımıza yazma süreçlerinde 
+yardımcı olmak ve okuyuculara daha iyi bir deneyim sunmaktır. Yapay zekamızın sunduğu özelliklerle, yazı yazanların işlerini kolaylaştırmak ve içeriklerini 
+daha etkili hale getirmek için çeşitli araçlar sunuyoruz.
+
+[tanıtım videosu]([hedef_url](https://github.com/keremparlak0/ChatGPTBlogWebApp/blob/version-5.0/tan%C4%B1t%C4%B1m.mp4))
+
 ## Proje Amacı
 1. Blog yazarlarına ChatGPT sayesinde yazı örnekleri sunmak ve otomatik yazım & imla kontrolü gibi özelliklerle daha kaliteli içerik üretme imkanı sağlamak.
 2. yayınlama aşamasında otomatik konu ve etiket belirlenmesi ile dahamverimli içerik üretilmesi.
