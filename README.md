@@ -24,18 +24,18 @@ Tanıtım videosu için [tıklayın](https://github.com/keremparlak0/ChatGPTBlog
 ## Kullanılan Teknolojiler
 Projemizde programlama dili olarak Python, Web uygulama çatısı olarak Django, ChatGPT çağrıları için JavaScript, Web tasarımı için Bootstrap çatısı kullanılmaktadır.
 
+# Özellikler
+* Profil oluşturma
+* Yazı yayınlama
+* Yazı ve profil arama
+* Yorum yapma
+
 # Geliştirme süreci
 Şu an projemiz geliştirme aşamasında ve bizimle birlikte çalışmak isteyen herkesi ekibimize katılmaya davet ediyoruz. Projemizin Github sayfasına giderek kodlarımızı inceleyebilir, geliştirmek istediğiniz bölümler hakkında fikirlerinizi paylaşabilir ve katkıda bulunabilirsiniz.
 
 Ayrıca, projemizi daha da geniş kitlelere duyurmak için sizin gibi takipçilerimize de ihtiyacımız var. Eğer bu projeyi destekliyorsanız, LinkedIn ve diğer sosyal medya platformlarında projemizin bağlantısını paylaşarak daha fazla kişiye ulaşmasına yardımcı olabilirsiniz.
 
 Projemiz için finansal olarak da desteğe ihtiyacımız var. Uygulamanın canlıya alınacağı platform ve kullanılacak APIler için belli bir maliyetin altına girmiş bulunmaktayız. Gelecek vaadeden projemize, finansal olarak destek vermek isterseniz bizimle iletişime geçebilirsiniz.
-
-# Özellikler
-* Profil oluşturma
-* Yazı yayınlama
-* Yazı ve profil arama
-* Yorum yapabilme
 
 ## Proje Geliştirme Modeli
 Proje geliştirme modeli olarak Kodla Ve Düzelt Yaşam Döngü Modeli kullanılmaktadır. Bu model ile amacımız hızlı bir geliştirme safhası geçirmek ve ardından projeyi test ederek hataları düzeltmek, varsa eksikleri gidermek. 
