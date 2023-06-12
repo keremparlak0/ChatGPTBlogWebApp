@@ -14,7 +14,7 @@
     <div class="col-lg-8 pt-4">
       <!-- Blog Yazısı -->
       <div class="blog-entry">
-        <h2> {{ blog.draft.title }} </h2>
+	      <h2> {{ blog.draft.title }} <small>{{ blog.date }}</small> </h2>
         <hr>
         <label for="langs">Dil tercihi</label>
         <select name="langs" id="langs">
@@ -24,6 +24,7 @@
           <option value="spanish">İspanyolca</option>
           <option value="deutch">Almanca</option>
         </select>
+        <div class="dlb"> </div>
         <div class="">
           <img src="{{ blog.banner.url }}" class="w-50" alt="">
         </div>

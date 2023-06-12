@@ -54,13 +54,13 @@ def delDraft(request, draft_id):
     else:
         return HttpResponse("Yetkisiz erişim")
 
-def generate_text2(prompt):
-    openai.api_key = "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"
+def translate(prompt, lang):
+    openai.api_key = "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"
     URL = "https://api.openai.com/v1/chat/completions"
     message = prompt
     payload = {
     "model": "gpt-3.5-turbo",
-    "messages": [{"role": "user", "content": f" {message} hakkında hakkında en fazla 15 kelimelik bir blog yazısı istiyorum. Profesyonel bir yazarın yazdığı gibi yazın."}], 
+    "messages": [{"role": "user", "content": f" Translate {message} into {lang}"}], 
     "temperature" : 1.0,
     "top_p":1.0,
     "n" : 5,
@@ -77,7 +77,32 @@ def generate_text2(prompt):
     response = requests.post(URL, headers=headers, json=payload, stream=False)
     reply = response.json()
     
-    return reply
+    return reply  
+
+def generate_text2(prompt):
+    openai.api_key = "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"
+    URL = "https://api.openai.com/v1/chat/completions"
+    message = prompt
+    payload = {
+    "model": "gpt-3.5-turbo",
+    "messages": [{"role": "user", "content": f" {message} hakkında hakkında en fazla 75 kelimelik bir blog yazısı istiyorum. Profesyonel bir yazarın yazdığı gibi yazın."}], 
+    "temperature" : 1.0,
+    "top_p":1.0,
+    "n" : 5,
+    
+    "presence_penalty":0,
+    "frequency_penalty":0,
+    }
+
+    headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {openai.api_key}"
+    }
+
+    response = requests.post(URL, headers=headers, json=payload, stream=False)
+    reply = response.json()
+    
+    return reply        
 
 def generate_text(prompt):
     URL = "https://api.openai.com/v1/chat/completions"
@@ -111,9 +136,8 @@ def publish(request, draft_id):
     record = get_object_or_404(Draft, pk=draft_id)
     author = Author.objects.get(user = request.user)
 
-    openai.api_key = "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"
+    openai.api_key = "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"
     message = generate_text(record.content)
-    print(message)
     try:
         data = message["choices"]
         content_list = [item['message']['content'] for item in data]
@@ -185,7 +209,7 @@ def update(request, message=""):
         author = Author.objects.get(user = request.user)
     except Author.DoesNotExist:
         author = None
-
+    
     if request.method == 'POST':
         form = UpdateForm(request.POST, request.FILES)
         if form.is_valid():
@@ -199,15 +223,15 @@ def update(request, message=""):
                 user_profile = UserProfile.objects.get(user=request.user)
                 user_profile.profile_picture = author.picture
                 user_profile.save()
-            else:
 
+            else:
                 author = Author(
                     user = request.user,
                     about = form.cleaned_data["about"],
                     contact = form.cleaned_data["contact"],
                     birthday = form.cleaned_data["birthday"],
                     picture = request.FILES["picture"],
-                    )
+                )
                 author.save() 
                 user_profile = UserProfile.objects.get(user=request.user)
                 user_profile.profile_picture = author.picture
@@ -218,10 +242,7 @@ def update(request, message=""):
         else:
             return HttpResponse("form geçerli değil")
     else:
-        if author:
-            form = UpdateForm(instance=author)
-        else:
-            form = UpdateForm()
+        form = UpdateForm()
         context = {
             'message':message,
             'form':form,
@@ -292,39 +313,15 @@ def publishajax(request):
     # Hatalı istek durumunda hata yanıtı döndür
     return JsonResponse({'success': False, 'message': 'Geçersiz istek'}, status=400)
 
-@csrf_exempt
-def aboutajax(request):
-    user = request.user
-    author = Author.objects.get(user_id=user)
-    if request.method == 'POST':
-        # Formdan gelen verileri al
-        about = request.POST.get('about')
-        print(about)
-        if about == "":
-            return JsonResponse({'success': False, 'message': 'Başlık veya içerik boş olamaz'}, status=400)
-        print(about)    
-        
-        try:
-            author.about = about
-            author.save()
-        except:
-            return JsonResponse({'success': False, 'message': 'Hata oluştu'}, status=400)
-        
-        
-
-
-        # Başarılı yanıt döndür
-        return JsonResponse({'success': True, 'author_id': author.id, 'about': about})
-    
-    # Hatalı istek durumunda hata yanıtı döndür
-    return JsonResponse({'success': False, 'message': 'Geçersiz istek'}, status=400)
-
 
 @csrf_exempt
 def getsuggestions(request):
     if request.method == 'POST':
         # Formdan gelen verileri al
-        title = request.POST.get('title')
+        data = json.loads(request.body.decode('utf-8'))
+        
+        # JSON verisinden text ve lang değerlerini çek
+        title = data.get('title')
         
         suggest = generate_text2(title)
         
@@ -336,4 +333,22 @@ def getsuggestions(request):
         return JsonResponse({'success': True, 'suggest': reply})
     
     # Hatalı istek durumunda hata yanıtı döndür
+    return JsonResponse({'success': False, 'message': 'Geçersiz istek'}, status=400)
+import json
+
+@csrf_exempt
+def translateajax(request):
+    if request.method == 'POST':
+        # Formdan gelen verileri al
+        data = json.loads(request.body.decode('utf-8'))
+        
+        # JSON verisinden text ve lang değerlerini çek
+        text = data.get('text')
+        lang = data.get('lang')
+        reply = translate(text, lang)
+        #translate = reply['choices'][0]["message"]["content"]
+        print(reply['choices'][0]['message']['content'])
+
+        return JsonResponse({'success': True, 'translate': reply['choices'][0]['message']['content']})
+
     return JsonResponse({'success': False, 'message': 'Geçersiz istek'}, status=400)

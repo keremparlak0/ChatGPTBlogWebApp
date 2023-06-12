@@ -1,6 +1,6 @@
 $(document).ready(function() {
   // Öneri Al butonuna tıklandığında işlemleri gerçekleştirmek için bir event listener ekleyin
-  $('#addsuggest').on('click', function(e) {
+  $('#addsuggestdddd').on('click', function(e) {
   //document.getElementById('addsuggest').addEventListener('click', function() {
     // AJAX isteği yapmak için XMLHttpRequest nesnesini oluşturun
     e.preventDefault();

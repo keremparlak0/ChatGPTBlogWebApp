@@ -13,6 +13,6 @@ urlpatterns = [
     path('publish/<int:draft_id>', views.publish, name="publishDraft"),     # publish draft
     path('yazmayabasla/', views.yazmayabasla, name="yazmayabasla"),         # create draft's content
     path('publishajax/', views.publishajax, name="publishajax"),            # publish draft's content
-    path('aboutajax/', views.aboutajax, name="aboutajax"),                  # update author's about
     path('getsuggestions/', views.getsuggestions, name="getsuggestions"),   # get suggestions
+    path('translateajax/', views.translateajax, name="translateajax")
 ]

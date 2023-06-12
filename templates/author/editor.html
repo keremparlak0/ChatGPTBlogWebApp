@@ -10,39 +10,37 @@
   <!-- İçerik -->
 
   <div class="container">
-
-
-    <div class="row">
-      <div class="col-lg-8 editor">
-          <div class="mb-3">
-            <form method="post" id="draftForm">
-              {% csrf_token %}
-              {{ form.media }}
-              {{ form.as_p }}
-              
-            <button type="submit" name="action" id="draft-id" value="{{ draft.id }}" class="btn btn-secondary"> Kaydet </button>
-            </form>
-          </div>
-          <div class="mb-3 d-flex justify-content-end">
-            <a href="{% url 'publishDraft' draft.draft_id %}" id="publishBtn" class="btn btn-primary" style="display: none;"> Yayınla </a>       
-        </div>
-    </div>   
-    
-      <!-- Öneri Kısmı -->
-      <div class="col-lg-4" id="suggestion-div">
-      <button type="button" id="addsuggest" class="btn btnRenk">Öneri Al</button>
-        <!-- <div class="sticky-top">
-          <div class="suggestion">
-            <h5>Öneri</h5>
-            <hr>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, voluptas sequi tenetur, mollitia beatae tempore tempora dignissimos nemo exercitationem facere rerum id perspiciatis quod sapiente iste ea, possimus magnam cupiditate.</p>
-            <button type="button" id="add" class="btn btnRenk">Ekle</button>
-          </div>
-        </div> -->
+  <div class="row">
+    <div class="col-lg-8 editor">
+      <div class="mb-3">
+        <form method="post" id="draftForm">
+          {% csrf_token %}
+          {{ form.media }}
+          {{ form.as_p }}
+          <button type="submit" name="action" id="draft-id" value="{{ draft.id }}" class="btn btn-secondary">Kaydet</button>
+        </form>
       </div>
-    
+      <div class="mb-3 d-flex justify-content-end">
+        <a href="{% url 'publishDraft' draft.draft_id %}" id="publishBtn" class="btn btn-primary" style="display: none;">Yayınla</a>
+      </div>
+    </div>
+
+    <!-- Öneri Kısmı -->
+    <div class="col-lg-4">
+      <div class="d-flex flex-column">
+        <button type="button" id="addsuggest" class="btn btnRenk">Öneri Al</button>
+        <br> <br>
+        <div class="yukleniyor"></div>
+        <div id="suggestion-div">
+          
+          
+          <!-- Öneri yazıları -->
+        </div>
+      </div>
     </div>
   </div>
+</div>
+
   
   
 

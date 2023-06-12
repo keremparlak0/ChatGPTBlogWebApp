@@ -1,4 +1,6 @@
-const API_KEY = "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";
+const API_KEY = "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";
+
+//const API_KEY = "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";
   const blogContent = document.querySelector("#blog-content");
   const plainText = blogContent.innerHTML.replace(/(<([^>]+)>)/gi, "");
   const langSelection = document.querySelector("#langs");
@@ -8,28 +10,27 @@ const API_KEY = "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";
   const changing = async () => {
     if (langSelection.value != "turkish") {
       console.log(langSelection.value);
-
+      $('.dlb').text('Bekleyiniz...');
       try {
-        const response = await fetch("https://api.openai.com/v1/completions", {
+        const response = await fetch("/author/translateajax/", {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${API_KEY}`,
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({
-            model: "text-davinci-003",
-            prompt: `'${plainText}' metnini, '${langSelection.value}' diline çevir.`,
-            temperature: 0.9,
-            max_tokens: 150,
-            top_p: 1,
-            frequency_penalty: 0.0,
-            presence_penalty: 0.6,
-            stop: [" Human:", " AI:"],
+            "text": plainText,
+            "lang": langSelection.value
           }),
         });
-        const data = await response.json();
-        blogContent.textContent = data.choices[0].text;
-        console.log(data);
+  
+        if (response.ok) {
+          // İsteğin başarılı olduğu durum
+          const data = await response.json();
+          const translate = data.translate;
+          console.log(translate);
+          blogContent.textContent = translate
+          $('.dlb').text('');
+        } else {
+          // İsteğin hatalı olduğu durum
+          console.error("HTTP isteği başarısız: " + response.status);
+        }
       } catch (error) {
         console.log(error);
       }
